@@ -1,4 +1,6 @@
 import _ from "lodash";
+import "../scss/styles.scss";
+import { Tooltip, Toast, Popover } from "bootstrap";
 
 function component() {
   const element = document.createElement("div");
