@@ -1,6 +1,7 @@
 .vscode
 dist/*
 !dist/index.html
+spikes
 # --------------
 
 # Logs

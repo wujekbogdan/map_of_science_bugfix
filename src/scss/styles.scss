@@ -6,30 +6,12 @@ body, html {
     padding: 0;
 }
 
-#scatterplot {
+#container {
     position: absolute;
-    top: 46px; // Adjust based on the height of the navbar
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow: hidden;
-}
-
-.navbar {
-    width: 100%;
-
-    .navbar-brand, .nav-link {
-        padding: 5px 10px; // Padding for navbar items
-    }
-}
-
-#map {
-    position: absolute;
-    top: 0; // Adjust based on the height of the navbar
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     overflow: hidden;
     background-color: white;
-    z-index: -1;
 }
