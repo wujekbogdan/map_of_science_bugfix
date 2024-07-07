@@ -154,11 +154,9 @@ function buildFcPointer() {
     }
 
     // find the closes datapoint to the pointer
-    const x = xScale.invert(coord.x) - 5;
+    const x = xScale.invert(coord.x);
     const y = yScale.invert(coord.y);
-    const radius = Math.abs(
-      xScale.invert(coord.x) - xScale.invert(coord.x + 20)
-    );
+    const radius = 5.0;
 
     const closestDatum = quadtree.find(x, y, radius);
 
@@ -320,15 +318,16 @@ function axisHide() {
   /**
    * Hides d3fc axis. Probably the easiest way to acheve that.
    * An alternative is to use pure CSS and add !important tag.
+   *
+   * Warning: this method breaks pointing / displaying annotations.
    */
-  d3.select("#chart")
-    .select("d3fc-svg.x-axis")
-    .style("height", "0")
-    .style("width", "0");
-  d3.select("#chart")
-    .select("d3fc-svg.y-axis")
-    .style("height", "0")
-    .style("width", "0");
+
+  d3.select("#chart").select("d3fc-svg.x-axis").style("visibility", "hidden");
+  // .style("height", "0")
+  // .style("width", "0");
+  d3.select("#chart").select("d3fc-svg.y-axis").style("visibility", "hidden");
+  // .style("height", "0")
+  // .style("width", "0");
 }
 
 let chart = buildChart(
