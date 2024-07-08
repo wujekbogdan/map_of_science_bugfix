@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import * as fc from "d3fc";
 import * as fca from "@d3fc/d3fc-annotation";
 import * as d3SvgAnnotation from "d3-svg-annotation";
+import { INFINITY } from "chart.js/helpers";
 
 let data = [];
 let quadtree;
@@ -88,14 +89,13 @@ streamingLoaderWorker.postMessage(
   new URL("./processed1_data.tsv", import.meta.url).href
 );
 
-function iterateElements(selector, fn) {
-  [].forEach.call(document.querySelectorAll(selector), fn);
-}
-
 const xScale = d3.scaleLinear().domain([-500, 500]);
 const yScale = d3.scaleLinear().domain([-500, 500]);
 const xScaleOriginal = xScale.copy();
 const yScaleOriginal = yScale.copy();
+let xPointer = NaN;
+let yPointer = NaN;
+let closestPoint = null;
 
 function buildAnnotationData(pointData) {
   return {
@@ -115,6 +115,10 @@ function buildZoom() {
   return d3
     .zoom()
     .scaleExtent([0.8, 1000])
+    .translateExtent([
+      [-INFINITY, -INFINITY],
+      [INFINITY, INFINITY],
+    ])
     .on("zoom", (event) => {
       // update the scales based on current zoom
       xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
@@ -150,16 +154,21 @@ function buildFcPointer() {
       return;
     }
 
-    // find the closes datapoint to the pointer
     const x = xScale.invert(coord.x);
     const y = yScale.invert(coord.y);
-    console.log(x, y);
-    const radius = 5.0;
 
+    const radius = 5.0;
+    // find the closes datapoint to the pointer
     const closestDatum = quadtree.find(x, y, radius);
+
+    xPointer = x;
+    yPointer = y;
 
     if (closestDatum) {
       annotations[0] = buildAnnotationData(closestDatum);
+      closestPoint = closestDatum;
+    } else {
+      closestPoint = null;
     }
 
     redraw();
@@ -273,6 +282,8 @@ function buildFcPointSeries(k = 1.0) {
 
 let pointSeries = buildFcPointSeries();
 
+function onClick(x, y) {}
+
 function buildChart(
   xScale,
   yScale,
@@ -309,6 +320,9 @@ function buildChart(
         })
         .call(pointer)
         .call(zoom)
+        .on("click", (event) => {
+          onClick(xPointer, yPointer);
+        })
         /**
          * Below line fixes error with:
          * (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function

@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: "Bai Jamjuree", sans-serif;
+      }
+
+      /** 
+       * alt way to hide d3fc chart axis.
+       */
+      /*
+      .bottom-axis {
+        background-color: blue;
+        width: 0 !important;
+        height: 0 !important;
+      }
+
+      .right-axis {
+        background-color: blue;
+        width: 0 !important;
+        height: 0 !important;
+      } */
+
+      .annotation-note-bg {
+        fill-opacity: 0.8;
+
+      }
+
+      .annotation-note-label,
+      .annotation-note-title {
+        fill: black;
+        font-size: 1em;
+      }
+
+    </style>
+  <script defer src="main.js"></script></head>
+  <body>
+    <div id="chart-container">
+      <div id="chart"></div>
+      <div id="loading"><span>loading...</span></div>
+    </div>
+
+    <script src="main.js" type="module"></script>
+  </body>
+</html>
