@@ -55,7 +55,7 @@ function clusterCategoryIdToColor(clusterCategoryId) {
 }
 
 function keyConceptsIdsParse(keyConceptsRaw) {
-  keyConceptsRaw.split(",");
+  return keyConceptsRaw.split(",");
 }
 
 streamingLoaderWorker.onmessage = ({
@@ -171,6 +171,8 @@ function buildFcPointer() {
       closestPoint = null;
     }
 
+    onPoint(coord.x, coord.y, x, y, closestPoint, xScale, yScale);
+
     redraw();
   });
 }
@@ -284,6 +286,78 @@ let pointSeries = buildFcPointSeries();
 
 function onClick(x, y) {}
 
+function updateAnnotation(dataPoint, xScale, yScale) {
+  if (dataPoint == null) {
+    disableAnnotation();
+  } else {
+    buildAnnotation(dataPoint);
+    enableAnnotation(dataPoint, xScale, yScale);
+  }
+}
+
+function buildAnnotation(dataPoint) {
+  const annotation = document.getElementById("annotation-body");
+
+  let html = "";
+
+  // cluster id
+  html += "<strong>#" + dataPoint.clusterId + "</strong>" + "<br />";
+
+  // cluster category
+  html += clusterCategoryIdToText(dataPoint.clusterCategoryId) + "<br />";
+
+  // number of articles
+  if (dataPoint.numRecentArticles <= 100) {
+    html += "<span class='few-articles'>";
+  } else if (dataPoint.numRecentArticles >= 1000) {
+    html += "<span class='many-articles'>";
+  } else {
+    html += "<span>";
+  }
+  html += "articles: " + dataPoint.numRecentArticles + "</span><br />";
+
+  // growth rating
+  if (dataPoint.growthRating >= 80) {
+    html += "<span class='many-articles'>";
+  } else {
+    html += "<span>";
+  }
+  html += "growth: " + dataPoint.growthRating + "</span><br />";
+
+  annotation.innerHTML = html;
+}
+
+function enableAnnotation(nearestDataPoint, xScale, yScale) {
+  const annotation = document.getElementById("annotation");
+
+  /* TODO: investigate why its needed */
+  const offset = 16;
+
+  const x = xScale(nearestDataPoint.x) + offset;
+  const y = yScale(nearestDataPoint.y) + offset;
+
+  annotation.style.visibility = "visible";
+  annotation.style.top = y + "px";
+  annotation.style.left = x + "px";
+}
+
+function disableAnnotation() {
+  const annotation = document.getElementById("annotation");
+  annotation.style.visibility = "hidden";
+}
+
+function onPoint(
+  xSite,
+  ySite,
+  xChart,
+  yChart,
+  nearestDataPoint,
+  xScale,
+  yScale
+) {
+  updateAnnotation(nearestDataPoint, xScale, yScale);
+}
+
 function buildChart(
   xScale,
   yScale,
@@ -304,10 +378,9 @@ function buildChart(
     )
     .svgPlotArea(
       // only render the annotations series on the SVG layer
-      fc
-        .seriesSvgMulti()
-        .series([annotationSeries])
-        .mapping((d) => d.annotations)
+      fc.seriesSvgMulti()
+      // .series([annotationSeries])
+      // .mapping((d) => d.annotations)
     )
     .decorate((sel) =>
       sel
@@ -362,6 +435,7 @@ let chart = buildChart(
 // Enqueues a redraw to occur on the next animation frame
 function redraw() {
   d3.select("#chart").datum({ annotations, data }).call(chart);
+  updateAnnotation(closestPoint, xScale, yScale);
   // d3.select("#chart").on("click", (event) => {
   //   console.log("clicked");
   // });
