@@ -4,14 +4,6 @@ import * as fc from "d3fc";
 import * as fca from "@d3fc/d3fc-annotation";
 import * as d3SvgAnnotation from "d3-svg-annotation";
 
-import {
-  distance,
-  trunc,
-  hashCode,
-  webglColor,
-  iterateElements,
-} from "./util.js";
-
 let data = [];
 let quadtree;
 
@@ -81,6 +73,7 @@ streamingLoaderWorker.onmessage = ({
 
   if (finished) {
     document.getElementById("loading").style.display = "none";
+
     // create a spatial index for rapidly finding the closest datapoint
     quadtree = d3
       .quadtree()
@@ -94,6 +87,10 @@ streamingLoaderWorker.onmessage = ({
 streamingLoaderWorker.postMessage(
   new URL("./processed1_data.tsv", import.meta.url).href
 );
+
+function iterateElements(selector, fn) {
+  [].forEach.call(document.querySelectorAll(selector), fn);
+}
 
 const xScale = d3.scaleLinear().domain([-500, 500]);
 const yScale = d3.scaleLinear().domain([-500, 500]);
@@ -156,6 +153,7 @@ function buildFcPointer() {
     // find the closes datapoint to the pointer
     const x = xScale.invert(coord.x);
     const y = yScale.invert(coord.y);
+    console.log(x, y);
     const radius = 5.0;
 
     const closestDatum = quadtree.find(x, y, radius);
@@ -309,8 +307,14 @@ function buildChart(
           yScaleOriginal.range([event.detail.height, 0]);
           axisHide();
         })
-        .call(zoom)
         .call(pointer)
+        .call(zoom)
+        /**
+         * Below line fixes error with:
+         * (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
+         * TypeError: (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
+         */
+        .on("dblclick.zoom", null)
     );
 }
 
@@ -344,4 +348,10 @@ let chart = buildChart(
 // Enqueues a redraw to occur on the next animation frame
 function redraw() {
   d3.select("#chart").datum({ annotations, data }).call(chart);
+  // d3.select("#chart").on("click", (event) => {
+  //   console.log("clicked");
+  // });
+  // d3.select("#chart").on("dbclick", (event) => {
+  //   console.log("bdclicked");
+  // });
 }
