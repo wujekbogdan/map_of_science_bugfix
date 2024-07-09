@@ -1,8 +1,6 @@
 // import { seriesSvgAnnotation } from "./annotation-series.js";
 import * as d3 from "d3";
 import * as fc from "d3fc";
-import * as fca from "@d3fc/d3fc-annotation";
-import * as d3SvgAnnotation from "d3-svg-annotation";
 import { INFINITY } from "chart.js/helpers";
 
 let data = [];
@@ -178,10 +176,6 @@ function buildFcPointer() {
 }
 const pointer = buildFcPointer();
 
-const annotationSeries = buildAnnotationSeries()
-  .notePadding(15)
-  .type(d3SvgAnnotation.annotationCallout);
-
 function pointDecorateProgram(data, program) {
   fc
     .webglFillColor()
@@ -224,50 +218,6 @@ function pointDataToSize(pointData, k = 1.0) {
     Math.min(1000 * k * (pointData.numRecentArticles / 1000), 10000)
   );
 }
-
-function buildAnnotationSeries() {
-  const d3Annotation = d3SvgAnnotation.annotation();
-
-  let xScale = d3.scaleLinear();
-  let yScale = d3.scaleLinear();
-
-  const join = fc.dataJoin("g", "annotation");
-
-  const series = (selection) => {
-    selection.each((data, index, group) => {
-      const projectedData = data.map((d) => ({
-        ...d,
-        x: xScale(d.x),
-        y: yScale(d.y),
-      }));
-
-      d3Annotation.annotations(projectedData);
-
-      join(d3.select(group[index]), projectedData).call(d3Annotation);
-    });
-  };
-
-  series.xScale = (...args) => {
-    if (!args.length) {
-      return xScale;
-    }
-    xScale = args[0];
-    return series;
-  };
-
-  series.yScale = (...args) => {
-    if (!args.length) {
-      return yScale;
-    }
-    yScale = args[0];
-    return series;
-  };
-
-  fc.rebindAll(series, d3Annotation);
-
-  return series;
-}
-
 function buildFcPointSeries(k = 1.0) {
   return fc
     .seriesWebglPoint()
