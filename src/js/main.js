@@ -94,6 +94,10 @@ const yScaleOriginal = yScale.copy();
 let xPointer = NaN;
 let yPointer = NaN;
 let closestPoint = null;
+let isAnnotationEnabled =
+  document.getElementById("annotation").style.visibility === "visible";
+let isArticleEnabled =
+  document.getElementById("article").style.visibility === "visible";
 
 function buildAnnotationData(pointData) {
   return {
@@ -240,6 +244,18 @@ function onClick(x, y) {
   } else {
     enableArticle(closestPoint);
   }
+  updateAnnotation(closestPoint, xScale, yScale);
+
+  if (closestPoint != null) {
+    const xx = closestPoint.x;
+    const yy = closestPoint.y;
+
+    d3.select("d3fc-svg.plot-area")
+      .transition()
+      .duration(1000)
+      .call(zoom.transform, d3.zoomIdentity.translate(xx, yy));
+    // zoom.transition().duration(1000).call(zoom.transform, d3.zoomIdentity);
+  }
 }
 
 function updateAnnotation(dataPoint, xScale, yScale) {
@@ -285,6 +301,7 @@ function buildAnnotation(dataPoint) {
 
 function enableAnnotation(nearestDataPoint, xScale, yScale) {
   const annotation = document.getElementById("annotation");
+  isAnnotationEnabled = true;
 
   /* TODO: investigate why its needed */
   const offset = 16;
@@ -300,6 +317,7 @@ function enableAnnotation(nearestDataPoint, xScale, yScale) {
 function disableAnnotation() {
   const annotation = document.getElementById("annotation");
   annotation.style.visibility = "hidden";
+  isAnnotationEnabled = false;
 }
 
 function buildArticle(dataPoint) {}
@@ -307,12 +325,14 @@ function buildArticle(dataPoint) {}
 function disableArticle() {
   const article = document.getElementById("article");
   article.style.visibility = "hidden";
+  isArticleEnabled = false;
 }
 
 function enableArticle(dataPoint) {
   const article = document.getElementById("article");
   buildArticle(dataPoint);
   article.style.visibility = "visible";
+  isArticleEnabled = true;
 }
 
 function onPoint(
