@@ -284,7 +284,13 @@ function buildFcPointSeries(k = 1.0) {
 
 let pointSeries = buildFcPointSeries();
 
-function onClick(x, y) {}
+function onClick(x, y) {
+  if (closestPoint == null) {
+    disableArticle();
+  } else {
+    enableArticle(closestPoint);
+  }
+}
 
 function updateAnnotation(dataPoint, xScale, yScale) {
   if (dataPoint == null) {
@@ -344,6 +350,19 @@ function enableAnnotation(nearestDataPoint, xScale, yScale) {
 function disableAnnotation() {
   const annotation = document.getElementById("annotation");
   annotation.style.visibility = "hidden";
+}
+
+function buildArticle(dataPoint) {}
+
+function disableArticle() {
+  const article = document.getElementById("article");
+  article.style.visibility = "hidden";
+}
+
+function enableArticle(dataPoint) {
+  const article = document.getElementById("article");
+  buildArticle(dataPoint);
+  article.style.visibility = "visible";
 }
 
 function onPoint(

@@ -51,14 +51,10 @@
         left:0;
       }
       #annotation-body {
-        background-color: #ffffffcc;
         position: absolute;
-        padding: 8px;
-        border-radius: 4px;
         top: 33px;
         left: 33px;
         z-index: 1;
-        border: #70707070 1px solid;
         display: inline-table;
         height: auto;
         white-space: nowrap;
@@ -72,6 +68,29 @@
         color: green;
       }
 
+      #article {
+        visibility: hidden;
+        position: absolute;
+        z-index: 2;
+        width: min(90vw, 700px);
+        height: 80vh;
+        left: 0; 
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;  
+        pointer-events: none;
+      }
+
+      .content {
+        background-color: #ffffffdd;
+        padding: 8px;
+        border-radius: 4px;
+        border: #70707070 1px solid;
+        box-shadow: 10px;
+        box-shadow: 3px 3px 5px #33333344;
+      }
+
     </style>
   </head>
   <body>
@@ -81,8 +100,13 @@
           <line x1="0" y1="0" x2="35" y2="35" style="stroke:#70707070;stroke-width:1" />
         </svg>
       </div>
-      <div id="annotation-body"></div>
+      <div id="annotation-body" class="content"></div>
     </div>
+
+    <div id="article" class="content">
+
+    </div>
+
     <div id="chart"></div>
     <div id="chart-container">
       <div id="loading"><span>loading...</span></div>
