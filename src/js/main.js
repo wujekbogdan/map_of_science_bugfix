@@ -95,9 +95,9 @@ let xPointer = NaN;
 let yPointer = NaN;
 let closestPoint = null;
 let isAnnotationEnabled =
-  document.getElementById("annotation").style.visibility === "visible";
+  document.getElementById("annotation").style.visibility == "visible";
 let isArticleEnabled =
-  document.getElementById("article").style.visibility === "visible";
+  document.getElementById("article").style.visibility == "visible";
 
 function buildAnnotationData(pointData) {
   return {
@@ -236,6 +236,19 @@ function buildFcPointSeries(k = 1.0) {
     });
 }
 
+const debugInfo = {};
+
+function printDebug(key, value) {
+  const debugDiv = document.getElementById("debug-body");
+  debugInfo[key] = value;
+
+  let html = "";
+  for (const k of Object.keys(debugInfo)) {
+    html += k + ": " + debugInfo[k] + "<br />";
+  }
+  debugDiv.innerHTML = html;
+}
+
 let pointSeries = buildFcPointSeries();
 
 function onClick(x, y) {
@@ -344,6 +357,18 @@ function onPoint(
   xScale,
   yScale
 ) {
+  printDebug("pointer (site?)", xSite + " " + ySite);
+  printDebug("pointer (chart)", xChart + " " + yChart);
+  printDebug("isAnnotation", isAnnotationEnabled);
+  printDebug("isArticle", isArticleEnabled);
+
+  printDebug(
+    "point",
+    nearestDataPoint != null
+      ? nearestDataPoint.x + " " + nearestDataPoint.y
+      : null
+  );
+
   updateAnnotation(nearestDataPoint, xScale, yScale);
 }
 
