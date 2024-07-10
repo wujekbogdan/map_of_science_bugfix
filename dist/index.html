@@ -8,42 +8,139 @@
         margin: 0;
         padding: 0;
         font-family: "Bai Jamjuree", sans-serif;
+        height: 100%;
+        overflow: hidden;
       }
 
-      /** 
-       * alt way to hide d3fc chart axis.
-       */
-      /*
-      .bottom-axis {
-        background-color: blue;
-        width: 0 !important;
-        height: 0 !important;
+      #annotation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #annotation-connection {
+        position: absolute;
+        top:0;
+        left:0;
+      }
+      #annotation-body {
+        position: absolute;
+        top: 33px;
+        left: 33px;
+        z-index: 1;
+        display: inline-table;
+        height: auto;
+        white-space: nowrap;
       }
 
-      .right-axis {
-        background-color: blue;
-        width: 0 !important;
-        height: 0 !important;
-      } */
-
-      .annotation-note-bg {
-        fill-opacity: 0.8;
-
+      .few-articles {
+        color: darkred;
       }
 
-      .annotation-note-label,
-      .annotation-note-title {
-        fill: black;
-        font-size: 1em;
+      .many-articles {
+        color: green;
       }
 
+      #article {
+        visibility: hidden;
+        position: absolute;
+        z-index: 2;
+        width: 60vw;
+        height: 90vh;
+        left: 0; 
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;  
+        /* pointer-events: none; */
+      }
+
+      .content {
+        background-color: #ffffffdd;
+        padding: 8px;
+        border-radius: 4px;
+        border: #70707070 1px solid;
+        box-shadow: 10px;
+        box-shadow: 3px 3px 5px #33333344;
+      }
+
+      #debug {
+        z-index: 10;
+        white-space: nowrap;
+        position: absolute;
+        top: 20px;
+        left: 220px;
+        font-size: x-small;
+      }
+
+      #chart {
+        position: relative; /* for annotation */
+        background-color: aqua;
+        width: 100%;
+        height: 100%;
+      }
+      /**
+        * d3fc enforces some styles that we need to override here because they don't match our styles.
+        */
+      /* disabling d3fc axis and labels */
+      #chart d3fc-svg.x-axis {
+        height: 0;
+      }
+      #chart d3fc-svg.y-axis {
+        width: 0;
+      }
+
+      #chart .chart-label,
+      #chart .x-label,
+      #chart .y-label {
+        display: none;
+      }
+      /* below removes empty space around plots and keeps them overlaying */
+      #chart d3fc-group.cartesian-chart {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+      } 
+      #chart .plot-area {
+        grid-row-start: 1;
+        grid-column-start: 1;
+      }
     </style>
   <script defer src="main.js"></script></head>
   <body>
-    <div id="chart-container">
-      <div id="chart"></div>
-      <div id="loading"><span>loading...</span></div>
+    <!-- debug panel -->
+    <div id="debug" class="content">
+      <strong>.:: dev panel ::.</strong>
+      <div id="debug-body">
+        n/a
+      </div>
     </div>
+
+    <!-- article -->
+    <div id="article" class="content">
+      <strong>Article</strong>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit 
+      </p>
+    </div>
+
+    <!-- chart -->
+    <div id="chart">
+      <!-- annotation -->
+      <div id="annotation">
+        <div id="annotation-connection">
+          <svg height="35" width="35" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="0" x2="35" y2="35" style="stroke:#70707070;stroke-width:1" />
+          </svg>
+        </div>
+        <div id="annotation-body" class="content"></div>
+      </div>
+    </div>
+
+    <!-- loading -->
+    <div id="loading"><span>loading...</span></div>
 
     <script src="main.js" type="module"></script>
   </body>

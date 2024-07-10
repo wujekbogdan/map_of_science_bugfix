@@ -262,6 +262,18 @@ function onClick(x, y) {
     disableArticle();
   } else {
     enableArticle(closestPoint);
+
+    const article = document.getElementById("article");
+    article.innerHTML =
+      "<iframe src='https://sciencemap.eto.tech/cluster/?version=2&cluster_id=" +
+      closestPoint.clusterId +
+      "' width='100%' height='100%'></iframe>";
+
+    // window.open(
+    //   "https://sciencemap.eto.tech/cluster/?version=2&cluster_id=" +
+    //     closestPoint.clusterId,
+    //   "_blank"
+    // );
   }
   updateAnnotation(closestPoint, xScale0, yScale0);
 
