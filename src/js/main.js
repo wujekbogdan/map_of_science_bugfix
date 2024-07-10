@@ -4,10 +4,15 @@ import * as fc from "d3fc";
 import { INFINITY } from "chart.js/helpers";
 
 let data = [];
+let concepts = {};
 let quadtree;
 
 // create a web worker that streams the chart data
 const streamingLoaderWorker = new Worker(
+  new URL("./streaming-tsv-parser.js", import.meta.url).href
+);
+
+const streamingLoaderWorker0 = new Worker(
   new URL("./streaming-tsv-parser.js", import.meta.url).href
 );
 
@@ -87,6 +92,18 @@ streamingLoaderWorker.postMessage(
   new URL("./processed1_data.tsv", import.meta.url).href
 );
 
+streamingLoaderWorker0.onmessage = ({
+  data: { items, totalBytes, finished },
+}) => {
+  items.map((d) => {
+    concepts[d["index"]] = d["key"];
+  });
+};
+
+streamingLoaderWorker0.postMessage(
+  new URL("./processed0_keys.tsv", import.meta.url).href
+);
+
 const xScale0 = d3.scaleLinear().domain([-500, 500]);
 const yScale0 = d3.scaleLinear().domain([-500, 500]);
 const xScaleOriginal = d3.scaleLinear().domain([-500, 500]);
@@ -100,20 +117,6 @@ let isAnnotationEnabled =
   document.getElementById("annotation").style.visibility == "visible";
 let isArticleEnabled =
   document.getElementById("article").style.visibility == "visible";
-
-function buildAnnotationData(pointData) {
-  return {
-    note: {
-      label: clusterCategoryIdToText(pointData.clusterCategoryId),
-      bgPadding: 10,
-      title: "#" + pointData.clusterId,
-    },
-    x: pointData.x,
-    y: pointData.y,
-    dx: 20,
-    dy: 20,
-  };
-}
 
 function buildZoom() {
   return d3
@@ -311,6 +314,16 @@ function buildAnnotation(dataPoint) {
   }
   html += "growth: " + dataPoint.growthRating + "</span><br />";
 
+  // key concepts
+
+  html += "<br /><strong>key concepts:</strong><ul>";
+
+  for (const concept_id of dataPoint.keyConcepts) {
+    html += "<li>" + concepts[Number(concept_id)] + "</li>";
+  }
+
+  html += "</ul>";
+
   annotation.innerHTML = html;
 }
 
@@ -406,7 +419,6 @@ function buildChart(
         .enter()
         .select("d3fc-svg.plot-area")
         .on("measure.range", (event) => {
-          console.log(event);
           xScaleOriginal.range([0, event.detail.width]);
           yScaleOriginal.range([event.detail.height, 0]);
           xScale0.range([0, event.detail.width]);
