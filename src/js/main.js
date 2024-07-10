@@ -87,10 +87,12 @@ streamingLoaderWorker.postMessage(
   new URL("./processed1_data.tsv", import.meta.url).href
 );
 
-const xScale = d3.scaleLinear().domain([-500, 500]);
-const yScale = d3.scaleLinear().domain([-500, 500]);
-const xScaleOriginal = xScale.copy();
-const yScaleOriginal = yScale.copy();
+const xScale0 = d3.scaleLinear().domain([-500, 500]);
+const yScale0 = d3.scaleLinear().domain([-500, 500]);
+const xScaleOriginal = d3.scaleLinear().domain([-500, 500]);
+const yScaleOriginal = d3.scaleLinear().domain([-500, 500]);
+const xScale = xScaleOriginal.copy();
+const yScale = yScaleOriginal.copy();
 let xPointer = NaN;
 let yPointer = NaN;
 let closestPoint = null;
@@ -125,6 +127,9 @@ function buildZoom() {
       // update the scales based on current zoom
       xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
       yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
+      xScale0.domain(event.transform.rescaleX(xScaleOriginal).domain());
+      yScale0.domain(event.transform.rescaleY(yScaleOriginal).domain());
+      updateAnnotation(closestPoint, xScale0, yScale0);
 
       // const k = event.transform.k;
 
@@ -150,14 +155,13 @@ const annotations = [];
 
 function buildFcPointer() {
   return fc.pointer().on("point", ([coord]) => {
-    annotations.pop();
-
     if (!coord || !quadtree) {
       return;
     }
 
-    const x = xScale.invert(coord.x);
-    const y = yScale.invert(coord.y);
+    const x = xScale0.invert(coord.x);
+    const y = yScale0.invert(coord.y);
+    // console.log(coord, xScale0.domain(), yScale0.domain(), x, y);
 
     const radius = 5.0;
     // find the closes datapoint to the pointer
@@ -167,15 +171,14 @@ function buildFcPointer() {
     yPointer = y;
 
     if (closestDatum) {
-      annotations[0] = buildAnnotationData(closestDatum);
       closestPoint = closestDatum;
     } else {
       closestPoint = null;
     }
 
-    onPoint(coord.x, coord.y, x, y, closestPoint, xScale, yScale);
+    onPoint(coord.x, coord.y, x, y, closestPoint, xScale0, yScale0);
 
-    redraw();
+    // redraw();
   });
 }
 const pointer = buildFcPointer();
@@ -257,17 +260,16 @@ function onClick(x, y) {
   } else {
     enableArticle(closestPoint);
   }
-  updateAnnotation(closestPoint, xScale, yScale);
+  updateAnnotation(closestPoint, xScale0, yScale0);
 
   if (closestPoint != null) {
     const xx = closestPoint.x;
     const yy = closestPoint.y;
 
-    d3.select("d3fc-svg.plot-area")
-      .transition()
-      .duration(1000)
-      .call(zoom.transform, d3.zoomIdentity.translate(xx, yy));
-    // zoom.transition().duration(1000).call(zoom.transform, d3.zoomIdentity);
+    // d3.select("d3fc-svg.plot-area")
+    //   .transition()
+    //   .duration(1000)
+    //   .call(zoom.transform, d3.zoomIdentity.translate(xx, yy));
   }
 }
 
@@ -312,15 +314,12 @@ function buildAnnotation(dataPoint) {
   annotation.innerHTML = html;
 }
 
-function enableAnnotation(nearestDataPoint, xScale, yScale) {
+function enableAnnotation(dataPoint, xScale, yScale) {
   const annotation = document.getElementById("annotation");
   isAnnotationEnabled = true;
 
-  /* TODO: investigate why its needed */
-  const offset = 16;
-
-  const x = xScale(nearestDataPoint.x) + offset;
-  const y = yScale(nearestDataPoint.y) + offset;
+  const x = xScale(dataPoint.x);
+  const y = yScale(dataPoint.y);
 
   annotation.style.visibility = "visible";
   annotation.style.top = y + "px";
@@ -363,9 +362,15 @@ function onPoint(
   printDebug("isArticle", isArticleEnabled);
 
   printDebug(
-    "point",
+    "point (chart)",
     nearestDataPoint != null
       ? nearestDataPoint.x + " " + nearestDataPoint.y
+      : null
+  );
+  printDebug(
+    "point (site?)",
+    nearestDataPoint != null
+      ? xScale(nearestDataPoint.x) + " " + yScale(nearestDataPoint.y)
       : null
   );
 
@@ -396,14 +401,16 @@ function buildChart(
       // .series([annotationSeries])
       // .mapping((d) => d.annotations)
     )
-    .decorate((sel) =>
+    .decorate((sel) => {
       sel
         .enter()
         .select("d3fc-svg.plot-area")
         .on("measure.range", (event) => {
+          console.log(event);
           xScaleOriginal.range([0, event.detail.width]);
           yScaleOriginal.range([event.detail.height, 0]);
-          axisHide();
+          xScale0.range([0, event.detail.width]);
+          yScale0.range([event.detail.height, 0]);
         })
         .call(pointer)
         .call(zoom)
@@ -415,8 +422,8 @@ function buildChart(
          * (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
          * TypeError: (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
          */
-        .on("dblclick.zoom", null)
-    );
+        .on("dblclick.zoom", null);
+    });
 }
 
 function axisHide() {
@@ -426,13 +433,14 @@ function axisHide() {
    *
    * Warning: this method breaks pointing / displaying annotations.
    */
-
-  d3.select("#chart").select("d3fc-svg.x-axis").style("visibility", "hidden");
-  // .style("height", "0")
-  // .style("width", "0");
-  d3.select("#chart").select("d3fc-svg.y-axis").style("visibility", "hidden");
-  // .style("height", "0")
-  // .style("width", "0");
+  d3.select("#chart")
+    .select("d3fc-svg.x-axis") // .style("visibility", "hidden");
+    .style("height", "0")
+    .style("width", "0");
+  d3.select("#chart")
+    .select("d3fc-svg.y-axis") // .style("visibility", "hidden");
+    .style("height", "0")
+    .style("width", "0");
 }
 
 let chart = buildChart(
@@ -449,7 +457,6 @@ let chart = buildChart(
 // Enqueues a redraw to occur on the next animation frame
 function redraw() {
   d3.select("#chart").datum({ annotations, data }).call(chart);
-  updateAnnotation(closestPoint, xScale, yScale);
   // d3.select("#chart").on("click", (event) => {
   //   console.log("clicked");
   // });
