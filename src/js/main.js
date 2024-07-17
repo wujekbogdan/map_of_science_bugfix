@@ -37,7 +37,7 @@ function clusterCategoryIdToText(clusterCategoryId) {
 }
 
 function clusterCategoryPalette() {
-  const alpha = 0.75;
+  const alpha = 1.0;
   return [
     [0.875, 0.125, 0.125, alpha],
     [0.875, 0.5341, 0.125, alpha],
@@ -262,13 +262,6 @@ function onClick(x, y) {
     disableArticle();
   } else {
     enableArticle(closestPoint);
-
-    const article = document.getElementById("article");
-    article.innerHTML =
-      "<iframe src='https://sciencemap.eto.tech/cluster/?version=2&cluster_id=" +
-      closestPoint.clusterId +
-      "' width='100%' height='100%'></iframe>";
-
     // window.open(
     //   "https://sciencemap.eto.tech/cluster/?version=2&cluster_id=" +
     //     closestPoint.clusterId,
@@ -357,7 +350,25 @@ function disableAnnotation() {
   isAnnotationEnabled = false;
 }
 
-function buildArticle(dataPoint) {}
+function buildArticle(dataPoint) {
+  const article = document.getElementById("article-content");
+  const url =
+    "https://sciencemap.eto.tech/cluster/?version=2&cluster_id=" +
+    dataPoint.clusterId;
+
+  article.innerHTML =
+    "<iframe src='" + url + "' width='100%' height='100%'></iframe>";
+
+  const articleClose = document.getElementById("article-close");
+  articleClose.onclick = () => {
+    disableArticle();
+  };
+
+  const articleOpen = document.getElementById("article-open");
+  articleOpen.onclick = () => {
+    window.open(url, "_blank");
+  };
+}
 
 function disableArticle() {
   const article = document.getElementById("article");
