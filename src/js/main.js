@@ -76,16 +76,16 @@ streamingLoaderWorker.onmessage = ({
   data = data.concat(rows);
 
   if (finished) {
-    document.getElementById("loading").style.display = "none";
-
     // create a spatial index for rapidly finding the closest datapoint
     quadtree = d3
       .quadtree()
       .x((d) => d.x)
       .y((d) => d.y)
       .addAll(data);
+
+    handleInit();
   }
-  redraw();
+  // redraw();
 };
 
 streamingLoaderWorker.postMessage(
@@ -104,10 +104,22 @@ streamingLoaderWorker0.postMessage(
   new URL("./processed0_keys.tsv", import.meta.url).href
 );
 
-const xScale0 = d3.scaleLinear().domain([-500, 500]);
-const yScale0 = d3.scaleLinear().domain([-500, 500]);
-const xScaleOriginal = d3.scaleLinear().domain([-500, 500]);
-const yScaleOriginal = d3.scaleLinear().domain([-500, 500]);
+function handleInit() {
+  const loadingElement = document.getElementById("loading");
+  const chartElement = document.getElementById("chart");
+
+  loadingElement.style.display = "none";
+  chartElement.style.display = "block";
+
+  updateGlobalScaleDomains(chartElement.clientWidth, chartElement.clientHeight);
+  transformLocalScaleDomains(d3.zoomIdentity);
+  redraw();
+}
+
+const xScaleOriginal = d3.scaleLinear();
+const yScaleOriginal = d3.scaleLinear();
+const xScale0 = xScaleOriginal.copy();
+const yScale0 = yScaleOriginal.copy();
 const xScale = xScaleOriginal.copy();
 const yScale = yScaleOriginal.copy();
 let xPointer = NaN;
@@ -118,6 +130,38 @@ let isAnnotationEnabled =
 let isArticleEnabled =
   document.getElementById("article").style.visibility == "visible";
 
+function updateGlobalScaleDomains(chartWidth, chartHeight) {
+  // rescale the global domain to keep chart aspect ratio
+  xScaleOriginal.domain([-chartWidth / 2, chartWidth / 2]);
+  yScaleOriginal.domain([-chartHeight / 2, chartHeight / 2]);
+}
+
+function transformLocalScaleDomains(transform) {
+  // resacle to present the area which should be visible after zoom
+  const xRange = transform.rescaleX(xScaleOriginal).domain();
+  const yRange = transform.rescaleY(yScaleOriginal).domain();
+
+  xScale.domain(xRange);
+  yScale.domain(yRange);
+
+  xScale0.domain(xRange);
+  yScale0.domain(yRange);
+}
+
+let zoomTransform = d3.zoomIdentity;
+
+function handleZoomEvent(zoomEvent) {
+  zoomTransform = zoomEvent.transform;
+
+  const chartElement = document.getElementById("chart");
+  updateGlobalScaleDomains(chartElement.clientWidth, chartElement.clientHeight);
+  transformLocalScaleDomains(zoomTransform);
+
+  updateAnnotation(closestPoint, xScale0, yScale0);
+
+  redraw();
+}
+
 function buildZoom() {
   return d3
     .zoom()
@@ -126,30 +170,7 @@ function buildZoom() {
       [-INFINITY, -INFINITY],
       [INFINITY, INFINITY],
     ])
-    .on("zoom", (event) => {
-      // update the scales based on current zoom
-      xScale.domain(event.transform.rescaleX(xScaleOriginal).domain());
-      yScale.domain(event.transform.rescaleY(yScaleOriginal).domain());
-      xScale0.domain(event.transform.rescaleX(xScaleOriginal).domain());
-      yScale0.domain(event.transform.rescaleY(yScaleOriginal).domain());
-      updateAnnotation(closestPoint, xScale0, yScale0);
-
-      // const k = event.transform.k;
-
-      // const pointSeries0 = buildFcPointSeries(k);
-
-      // chart = buildChart(
-      //   xScale,
-      //   yScale,
-      //   xScaleOriginal,
-      //   yScaleOriginal,
-      //   pointSeries0,
-      //   zoom,
-      //   pointer
-      // );
-
-      redraw();
-    });
+    .on("zoom", handleZoomEvent);
 }
 
 const zoom = buildZoom();
@@ -413,6 +434,35 @@ function onPoint(
   updateAnnotation(nearestDataPoint, xScale, yScale);
 }
 
+function updateScaleRanges(chartWidth, chartHeight) {
+  const xRange = [0, chartWidth];
+  const yRange = [chartHeight, 0];
+
+  xScaleOriginal.range(xRange);
+  yScaleOriginal.range(yRange);
+  xScale0.range(xRange);
+  yScale0.range(yRange);
+  xScale.range(xRange);
+  yScale.range(yRange);
+}
+
+function handleResizeEvent(eventResize) {
+  const width = eventResize.width;
+  const height = eventResize.height;
+
+  updateGlobalScaleDomains(width, height);
+  transformLocalScaleDomains(zoomTransform);
+  updateScaleRanges(width, height);
+
+  redraw();
+}
+
+function handleMeasureEvent(eventMeasure) {
+  if (eventMeasure.detail.resized) {
+    handleResizeEvent(eventMeasure.detail);
+  }
+}
+
 function buildChart(
   xScale,
   yScale,
@@ -441,12 +491,7 @@ function buildChart(
       sel
         .enter()
         .select("d3fc-svg.plot-area")
-        .on("measure.range", (event) => {
-          xScaleOriginal.range([0, event.detail.width]);
-          yScaleOriginal.range([event.detail.height, 0]);
-          xScale0.range([0, event.detail.width]);
-          yScale0.range([event.detail.height, 0]);
-        })
+        .on("measure", handleMeasureEvent)
         .call(pointer)
         .call(zoom)
         .on("click", (event) => {
