@@ -54,12 +54,10 @@
         z-index: 30;
         width: 40vw;
         height: 90vh;
-        /* left: 0;  */
         right: 5vw;
         top: 0;
         bottom: 0;
         margin: auto;  
-        /* pointer-events: none; */
       }
 
       #article-content {
@@ -83,10 +81,20 @@
         top: 20px;
         left: 220px;
         font-size: x-small;
-        /* display: none; */
+        display: none;
       }
 
-      #chart-svg {
+      #chart-foreground-0 {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      #chart-foreground-1 {
         position: absolute;
         left: 0;
         top: 0;
@@ -102,8 +110,6 @@
         display: none;
         width: 100%;
         height: 100%;
-        /* width: 1600px;
-        height: 800px; */
       }
       /**
         * d3fc enforces some styles that we need to override here because they don't match our styles.
@@ -131,19 +137,6 @@
         grid-row-start: 1;
         grid-column-start: 1;
       }
-
-      .flip-horizontal, .x-grid-cell-inner, .x-column-header-text, .x-panel-header-text {
-        -moz-transform: scaleY(-1);
-        -webkit-transform: scaleY(-1);
-        -o-transform: scaleY(-1);
-        transform: scaleY(-1);
-        -ms-filter: fliph; /*IE*/
-        filter: fliph; /*IE*/
-      }
-
-      .x-column-header-text, .x-panel-header-text {
-          display: inline-block;
-      }
     </style>
   </head>
   <body>
@@ -165,12 +158,11 @@
     <!-- chart -->
     <div id="chart">
       <!-- custom svg plane -->
-      <div id="chart-svg">
-        <!-- <img class="chart-svg-content" src=<%=require("./clusters.svg")%> /> -->
-        <%= htmlWebpackPlugin.options.foregroundSvg %>
-        <!-- <svg id="chart-svg-content" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <image x="0" y="0" width="100" height="100" href="" />
-        </svg> -->
+      <div id="chart-foreground-0">
+        <%= htmlWebpackPlugin.options.foreground0Svg %>
+      </div>
+      <div id="chart-foreground-1">
+        <%= htmlWebpackPlugin.options.foreground1Svg %>
       </div>
       <!-- annotation -->
       <div id="annotation">
