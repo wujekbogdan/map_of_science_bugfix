@@ -2,6 +2,7 @@
 import * as d3 from "d3";
 import * as fc from "d3fc";
 import { INFINITY } from "chart.js/helpers";
+import Clusters from "../clusters.svg";
 
 let data = [];
 let concepts = {};
@@ -104,6 +105,16 @@ streamingLoaderWorker0.postMessage(
   new URL("./processed0_keys.tsv", import.meta.url).href
 );
 
+function initForeground() {
+  const outer = document.getElementById("chart-svg");
+  const svg = outer.getElementsByTagName("svg")[0];
+  svg.id = "chart-svg-content";
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", "100%");
+  svg.setAttribute("viewBox", "0 0 100 100");
+  updateForeground();
+}
+
 function handleInit() {
   const loadingElement = document.getElementById("loading");
   const chartElement = document.getElementById("chart");
@@ -114,6 +125,26 @@ function handleInit() {
   updateGlobalScaleDomains(chartElement.clientWidth, chartElement.clientHeight);
   transformLocalScaleDomains(d3.zoomIdentity);
   redraw();
+
+  initForeground();
+
+  // const svg = d3
+  //   .select("#chart")
+  //   .append("svg")
+  //   .attr("width", "100%")
+  //   .attr("height", "100%")
+  //   // .call(
+  //   //   d3.zoom().on("zoom", (event) => {
+  //   //     svg.attr("transform", event.transform);
+  //   //   })
+  //   // )
+  //   .append("g");
+
+  // svg
+  //   .append("path")
+  //   .attr("d", "M10 80 Q 95 10 180 80 T 280 80") // example path
+  //   .attr("stroke", "black")
+  //   .attr("fill", "transparent");
 }
 
 const xScaleOriginal = d3.scaleLinear();
@@ -150,6 +181,23 @@ function transformLocalScaleDomains(transform) {
 
 let zoomTransform = d3.zoomIdentity;
 
+function updateForeground() {
+  const svg = document.getElementById("chart-svg-content");
+
+  const width = xScale0.domain()[1] - xScale0.domain()[0];
+  const height = yScale0.domain()[1] - yScale0.domain()[0];
+  const x = xScale0.domain()[0];
+  const y = yScale0.domain()[0];
+
+  // we need to convert to the SVG coordinate system
+  const y_prim = -y - height;
+
+  svg.viewBox.baseVal.x = x;
+  svg.viewBox.baseVal.y = y_prim;
+  svg.viewBox.baseVal.width = width;
+  svg.viewBox.baseVal.height = height;
+}
+
 function handleZoomEvent(zoomEvent) {
   zoomTransform = zoomEvent.transform;
 
@@ -158,6 +206,7 @@ function handleZoomEvent(zoomEvent) {
   transformLocalScaleDomains(zoomTransform);
 
   updateAnnotation(closestPoint, xScale0, yScale0);
+  updateForeground();
 
   redraw();
 }
@@ -472,38 +521,42 @@ function buildChart(
   zoom,
   pointer
 ) {
-  return fc
-    .chartCartesian(xScale, yScale)
-    .webglPlotArea(
-      // only render the point series on the WebGL layer
-      fc
-        .seriesWebglMulti()
-        .series([pointSeries])
-        .mapping((d) => d.data)
-    )
-    .svgPlotArea(
-      // only render the annotations series on the SVG layer
-      fc.seriesSvgMulti()
-      // .series([annotationSeries])
-      // .mapping((d) => d.annotations)
-    )
-    .decorate((sel) => {
-      sel
-        .enter()
-        .select("d3fc-svg.plot-area")
-        .on("measure", handleMeasureEvent)
-        .call(pointer)
-        .call(zoom)
-        .on("click", (event) => {
-          onClick(xPointer, yPointer);
-        })
-        /**
-         * Below line fixes error with:
-         * (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
-         * TypeError: (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
-         */
-        .on("dblclick.zoom", null);
-    });
+  return (
+    fc
+      .chartCartesian(xScale, yScale)
+      .webglPlotArea(
+        // only render the point series on the WebGL layer
+        fc
+          .seriesWebglMulti()
+          .series([pointSeries])
+          .mapping((d) => d.data)
+      )
+      // .svgPlotArea(
+      //   // only render the annotations series on the SVG layer
+      // fc.seriesSvgMulti()
+      //   // .series([annotationSeries])
+      //   // .mapping((d) => d.annotations)
+      // )
+      .decorate((sel) => {
+        sel
+          .enter()
+          // .select("d3fc-svg.plot-area")
+          .on("measure", handleMeasureEvent)
+          .call(pointer)
+          .call(zoom)
+          .on("click", (event) => {
+            onClick(xPointer, yPointer);
+          })
+          /**
+           * Below line fixes error with:
+           * (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
+           * TypeError: (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
+           */
+          .on("dblclick.zoom", null);
+
+        // d3.select("#chart").select("#chart-svg-content").call(zoom);
+      })
+  );
 }
 
 function axisHide() {

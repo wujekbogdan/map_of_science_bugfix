@@ -1,8 +1,12 @@
 "use strict";
 
+let fs = require("fs");
+
 const path = require("path");
 const autoprefixer = require("autoprefixer");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const clusterSvg = fs.readFileSync(__dirname + "/src/clusters.svg");
 
 module.exports = {
   mode: "development",
@@ -16,9 +20,18 @@ module.exports = {
     port: 8080,
     hot: true,
   },
-  plugins: [new HtmlWebpackPlugin({ template: "./src/index.html" })],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+      foregroundSvg: clusterSvg,
+    }),
+  ],
   module: {
     rules: [
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+      },
       {
         test: /\.(scss)$/,
         use: [

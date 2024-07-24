@@ -34,6 +34,7 @@
     "d3-interpolate": "^3.0.1",
     "d3-svg-annotation": "^0.0.0",
     "d3fc": "^15.2.12",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "svg-injector": "^1.1.3"
   }
 }
