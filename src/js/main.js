@@ -2,6 +2,8 @@
 import * as d3 from "d3";
 import * as fc from "d3fc";
 import { INFINITY } from "chart.js/helpers";
+import Foreground0 from "../foreground-0.svg";
+import Foreground1 from "../foreground-1.svg";
 
 let data = [];
 let concepts = {};
