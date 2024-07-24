@@ -502,6 +502,7 @@ function handleResizeEvent(eventResize) {
   updateGlobalScaleDomains(width, height);
   transformLocalScaleDomains(zoomTransform);
   updateScaleRanges(width, height);
+  updateForeground();
 
   redraw();
 }
