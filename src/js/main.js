@@ -112,7 +112,7 @@ function initForeground() {
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "100%");
   svg.setAttribute("viewBox", "0 0 100 100");
-  updateForeground();
+  updateForeground(xScale0, yScale0, null);
 }
 
 function handleInit() {
@@ -181,32 +181,65 @@ function transformLocalScaleDomains(transform) {
 
 let zoomTransform = d3.zoomIdentity;
 
-function updateForeground() {
-  const svg = document.getElementById("chart-svg-content");
-
-  const width = xScale0.domain()[1] - xScale0.domain()[0];
-  const height = yScale0.domain()[1] - yScale0.domain()[0];
-  const x = xScale0.domain()[0];
-  const y = yScale0.domain()[0];
+function updateForegorundScaling(element, xScale, yScale) {
+  const width = xScale.domain()[1] - xScale.domain()[0];
+  const height = yScale.domain()[1] - yScale.domain()[0];
+  const x = xScale.domain()[0];
+  const y = yScale.domain()[0];
 
   // we need to convert to the SVG coordinate system
   const y_prim = -y - height;
 
-  svg.viewBox.baseVal.x = x;
-  svg.viewBox.baseVal.y = y_prim;
-  svg.viewBox.baseVal.width = width;
-  svg.viewBox.baseVal.height = height;
+  element.viewBox.baseVal.x = x;
+  element.viewBox.baseVal.y = y_prim;
+  element.viewBox.baseVal.width = width;
+  element.viewBox.baseVal.height = height;
+}
+
+function calcForegroundVisibility(k, kStart, kStop, kRadius) {
+  if (k <= kStart) {
+    return 0.0;
+  } else if (kStart < k && k <= kStart + kRadius) {
+    return (k - kStart) / kRadius;
+  } else if (kStart + kRadius < k && k <= kStop - kRadius) {
+    return 1.0;
+  } else if (kStop - kRadius < k && k <= kStop) {
+    return (kStop - k) / kRadius;
+  } else {
+    return 0.0;
+  }
+}
+
+function updateForegroundVisibility(element, kZoom) {
+  if (kZoom == null || kZoom <= 0) {
+    return;
+  }
+
+  const visibility = calcForegroundVisibility(kZoom, -100, 5.0, 3.0);
+  element.style.opacity = visibility;
+}
+
+function updateForeground(xScale, yScale, kZoom) {
+  const svg = document.getElementById("chart-svg-content");
+
+  updateForegorundScaling(svg, xScale, yScale);
+
+  updateForegroundVisibility(svg, kZoom);
 }
 
 function handleZoomEvent(zoomEvent) {
   zoomTransform = zoomEvent.transform;
 
+  // update scales
   const chartElement = document.getElementById("chart");
   updateGlobalScaleDomains(chartElement.clientWidth, chartElement.clientHeight);
   transformLocalScaleDomains(zoomTransform);
 
+  // update annotations
   updateAnnotation(closestPoint, xScale0, yScale0);
-  updateForeground();
+
+  // update visualization layers
+  updateForeground(xScale0, yScale0, zoomTransform.k);
 
   redraw();
 }
@@ -502,7 +535,7 @@ function handleResizeEvent(eventResize) {
   updateGlobalScaleDomains(width, height);
   transformLocalScaleDomains(zoomTransform);
   updateScaleRanges(width, height);
-  updateForeground();
+  updateForeground(xScale0, yScale0, null);
 
   redraw();
 }
