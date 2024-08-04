@@ -56,6 +56,7 @@ function clusterCategoryPalette() {
 }
 
 function clusterCategoryIdToColor(clusterCategoryId) {
+  return [0, 0, 0, 1.0];
   return clusterCategoryPalette()[clusterCategoryId];
 }
 
@@ -109,7 +110,6 @@ streamingLoaderWorker0.postMessage(
 function initForeground(index) {
   const outer = document.getElementById("chart-foreground-" + index);
   const svg = outer.getElementsByTagName("svg")[0];
-  console.log("svg", svg);
   svg.id = outer.id + "-content";
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "100%");
@@ -132,24 +132,6 @@ function handleInit() {
 
   initForeground(0);
   initForeground(1);
-
-  // const svg = d3
-  //   .select("#chart")
-  //   .append("svg")
-  //   .attr("width", "100%")
-  //   .attr("height", "100%")
-  //   // .call(
-  //   //   d3.zoom().on("zoom", (event) => {
-  //   //     svg.attr("transform", event.transform);
-  //   //   })
-  //   // )
-  //   .append("g");
-
-  // svg
-  //   .append("path")
-  //   .attr("d", "M10 80 Q 95 10 180 80 T 280 80") // example path
-  //   .attr("stroke", "black")
-  //   .attr("fill", "transparent");
 }
 
 const xScaleOriginal = d3.scaleLinear();
@@ -332,6 +314,7 @@ function shaderProgramSetBlend(program) {
 }
 
 function pointDataToSize(pointData, k = 1.0) {
+  return 100;
   k = Math.max(0.5, Math.min(k, 3.0));
   return Math.max(
     100,
@@ -595,8 +578,6 @@ function buildChart(
            * TypeError: (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
            */
           .on("dblclick.zoom", null);
-
-        // d3.select("#chart").select("#chart-svg-content").call(zoom);
       })
   );
 }
@@ -628,10 +609,18 @@ let chart = buildChart(
   pointer
 );
 
+function isDataPointVisible(dataPoint) {
+  const k = zoomTransform.k;
+  const a_min = -111 * k + 1111;
+  return a_min <= dataPoint.numRecentArticles;
+}
+
 // render the chart with the required data
 // Enqueues a redraw to occur on the next animation frame
 function redraw() {
-  d3.select("#chart").datum({ annotations, data }).call(chart);
+  const _data = data.filter(isDataPointVisible);
+
+  d3.select("#chart").datum({ data: _data }).call(chart);
   // d3.select("#chart").on("click", (event) => {
   //   console.log("clicked");
   // });
