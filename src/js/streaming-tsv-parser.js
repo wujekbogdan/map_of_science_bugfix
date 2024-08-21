@@ -1,5 +1,3 @@
-
-
 // a TSV parser that parses the data incrementally in chunks
 const tsvChunkedParser = () => {
   const textDecoder = new TextDecoder("utf-8");
@@ -22,7 +20,7 @@ const tsvChunkedParser = () => {
 
       // convert each row to an object
       const items = lines
-        .map(row => {
+        .map((row) => {
           const cells = row.split("\t");
           if (cells.length !== columnHeadings.length) {
             return null;
@@ -33,13 +31,12 @@ const tsvChunkedParser = () => {
           });
           return rowValue;
         })
-        .filter(i => i);
+        .filter((i) => i);
 
       return items;
-    }
+    },
   };
 };
-
 
 onmessage = async ({ data: filename }) => {
   let totalBytes = 0;
@@ -73,7 +70,7 @@ onmessage = async ({ data: filename }) => {
         };
 
         read();
-      }
+      },
     })
   );
 
