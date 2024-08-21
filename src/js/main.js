@@ -314,7 +314,7 @@ function shaderProgramSetBlend(program) {
 }
 
 function pointDataToSize(pointData, k = 1.0) {
-  return 100;
+  return 5;
   k = Math.max(0.5, Math.min(k, 3.0));
   return Math.max(
     100,
@@ -615,12 +615,10 @@ function isDataPointVisible(dataPoint) {
   return a_min <= dataPoint.numRecentArticles;
 }
 
-// render the chart with the required data
-// Enqueues a redraw to occur on the next animation frame
 function redraw() {
   const _data = data.filter(isDataPointVisible);
 
-  d3.select("#chart").datum({ data: _data }).call(chart);
+  d3.select("#chart").datum({ data: data }).call(chart);
   // d3.select("#chart").on("click", (event) => {
   //   console.log("clicked");
   // });
