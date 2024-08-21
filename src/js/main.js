@@ -4,6 +4,7 @@ import * as fc from "d3fc";
 import { INFINITY } from "chart.js/helpers";
 import Foreground0 from "../foreground-0.svg";
 import Foreground1 from "../foreground-1.svg";
+import Foreground2 from "../foreground-2.svg";
 
 let data = [];
 let concepts = {};
@@ -79,6 +80,9 @@ streamingLoaderWorker.onmessage = ({
   data = data.concat(rows);
 
   if (finished) {
+    // sort data by num_recent_articles
+    data.sort((a, b) => b.numRecentArticles - a.numRecentArticles);
+
     // create a spatial index for rapidly finding the closest datapoint
     quadtree = d3
       .quadtree()
@@ -132,6 +136,7 @@ function handleInit() {
 
   initForeground(0);
   initForeground(1);
+  initForeground(2);
 }
 
 const xScaleOriginal = d3.scaleLinear();
@@ -203,9 +208,11 @@ function updateForegroundVisibility(index, element, kZoom) {
   }
 
   if (index == 0) {
-    element.style.opacity = calcForegroundVisibility(kZoom, -100, 5.0, 3.0);
+    element.style.opacity = calcForegroundVisibility(kZoom, -100, 10.0, 3.0);
   } else if (index == 1) {
-    element.style.opacity = calcForegroundVisibility(kZoom, 2.0, 100.0, 3.0);
+    element.style.opacity = calcForegroundVisibility(kZoom, 1.0, 15.0, 3.0);
+  } else if (index == 2) {
+    element.style.opacity = calcForegroundVisibility(kZoom, 4.0, 100.0, 3.0);
   }
 }
 
@@ -229,6 +236,7 @@ function handleZoomEvent(zoomEvent) {
   // update visualization layers
   updateForeground(0, xScale0, yScale0, zoomTransform.k);
   updateForeground(1, xScale0, yScale0, zoomTransform.k);
+  updateForeground(2, xScale0, yScale0, zoomTransform.k);
 
   redraw();
 }
@@ -314,7 +322,7 @@ function shaderProgramSetBlend(program) {
 }
 
 function pointDataToSize(pointData, k = 1.0) {
-  return 5;
+  return 100;
   k = Math.max(0.5, Math.min(k, 3.0));
   return Math.max(
     100,
@@ -331,7 +339,7 @@ function buildFcPointSeries(k = 1.0) {
     .decorate((program) => {
       pointDecorateProgram(data, program);
       // pointDecorateShaderProgram(data, program);
-      shaderProgramSetBlend(program);
+      // shaderProgramSetBlend(program);
     });
 }
 
@@ -375,6 +383,8 @@ function onClick(x, y) {
 }
 
 function updateAnnotation(dataPoint, xScale, yScale) {
+  return;
+
   if (dataPoint == null) {
     disableAnnotation();
   } else {
@@ -383,9 +393,7 @@ function updateAnnotation(dataPoint, xScale, yScale) {
   }
 }
 
-function buildAnnotation(dataPoint) {
-  const annotation = document.getElementById("annotation-body");
-
+function buildPointDetails(dataPoint) {
   let html = "";
 
   // cluster id
@@ -421,8 +429,13 @@ function buildAnnotation(dataPoint) {
   }
 
   html += "</ul>";
+  return html;
+}
 
-  annotation.innerHTML = html;
+function buildAnnotation(dataPoint) {
+  const annotation = document.getElementById("annotation-body");
+
+  annotation.innerHTML = buildPointDetails(dataPoint);
 }
 
 function enableAnnotation(dataPoint, xScale, yScale) {
@@ -443,14 +456,24 @@ function disableAnnotation() {
   isAnnotationEnabled = false;
 }
 
+function buildArticleContent(dataPoint, url) {
+  const html =
+    buildPointDetails(dataPoint) +
+    "<strong>More details from ETO</strong><br />" +
+    "<iframe src='" +
+    url +
+    "' width='100%' height='100%'></iframe>";
+
+  return html;
+}
+
 function buildArticle(dataPoint) {
   const article = document.getElementById("article-content");
   const url =
     "https://sciencemap.eto.tech/cluster/?version=2&cluster_id=" +
     dataPoint.clusterId;
 
-  article.innerHTML =
-    "<iframe src='" + url + "' width='100%' height='100%'></iframe>";
+  article.innerHTML = buildArticleContent(dataPoint, url);
 
   const articleClose = document.getElementById("article-close");
   articleClose.onclick = () => {
@@ -527,6 +550,7 @@ function handleResizeEvent(eventResize) {
   updateScaleRanges(width, height);
   updateForeground(0, xScale0, yScale0, null);
   updateForeground(1, xScale0, yScale0, null);
+  updateForeground(2, xScale0, yScale0, null);
 
   redraw();
 }
@@ -609,16 +633,30 @@ let chart = buildChart(
   pointer
 );
 
-function isDataPointVisible(dataPoint) {
-  const k = zoomTransform.k;
-  const a_min = -111 * k + 1111;
-  return a_min <= dataPoint.numRecentArticles;
+function isDataPointInDomain(dataPoint) {
+  const x = dataPoint.x;
+  const y = dataPoint.y;
+
+  const xDomain = xScale.domain();
+  const yDomain = yScale.domain();
+
+  if (x < xDomain[0] || x > xDomain[1] || y < yDomain[0] || y > yDomain[1]) {
+    return false;
+  }
+
+  return true;
+}
+
+function getDataPointsToRender(dataSorted) {
+  const dataInDomain = data.filter(isDataPointInDomain);
+  const dataToRender = dataInDomain.slice(0, 200);
+  return dataToRender;
 }
 
 function redraw() {
-  const _data = data.filter(isDataPointVisible);
+  const _data = getDataPointsToRender(data);
 
-  d3.select("#chart").datum({ data: data }).call(chart);
+  d3.select("#chart").datum({ data: _data }).call(chart);
   // d3.select("#chart").on("click", (event) => {
   //   console.log("clicked");
   // });

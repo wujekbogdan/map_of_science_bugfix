@@ -8,6 +8,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const foreground0Svg = fs.readFileSync(__dirname + "/src/foreground-0.svg");
 const foreground1Svg = fs.readFileSync(__dirname + "/src/foreground-1.svg");
+const foreground2Svg = fs.readFileSync(__dirname + "/src/foreground-2.svg");
 
 module.exports = {
   mode: "development",
@@ -26,6 +27,7 @@ module.exports = {
       template: "./src/index.html",
       foreground0Svg: foreground0Svg,
       foreground1Svg: foreground1Svg,
+      foreground2Svg: foreground2Svg,
     }),
   ],
   module: {
