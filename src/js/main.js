@@ -64,18 +64,6 @@ function handleMouseClick(dataPoints, x, y, xScale, yScale) {
   }
 }
 
-function updateMouseClickHandler(dataPoints, xScale, yScale) {
-  d3.select("#chart-d3").on("click", (eventMouse) =>
-    handleMouseClick(
-      dataPoints,
-      xScale.invert(eventMouse.offsetX),
-      yScale.invert(eventMouse.offsetY),
-      xScale,
-      yScale
-    )
-  );
-}
-
 function handleDataPointsLoaded(dataPoints) {
   console.log("Data Points Loaded");
 
@@ -189,21 +177,11 @@ function initChart(dataPoints) {
   initForeground(1);
   initForeground(2);
 
-  d3.select("#chart-d3")
-    .append("image")
-    .attr(
-      "xlink:href",
-      "https://upload.wikimedia.org/wikipedia/commons/d/d8/Compass_card_(de).svg"
-    )
-    .attr("width", 1000)
-    .attr("height", 1000);
-
   const svg = buildChart();
   // Create a group for all plot elements
   plotGroup = svg.append("g");
 
   const _data = getDataPointsToRender(data, xScale, yScale);
-  updateMouseClickHandler(_data, xScale, yScale);
   renderChart(_data);
 
   window.addEventListener("resize", handleResize);
@@ -303,7 +281,12 @@ function renderChart(data) {
 
   // Append shapes depending on the city type
   newShapes.each(function (d) {
-    const group = d3.select(this);
+    const group = d3
+      .select(this)
+      .on("mouseover", (event) => {})
+      .on("click", (event) => {
+        enableArticle(d);
+      });
 
     if (d.numRecentArticles <= 50) {
       group
@@ -415,7 +398,6 @@ function handleZoom(event) {
 
   // update points
   const _data = getDataPointsToRender(data, xScale, yScale);
-  updateMouseClickHandler(_data, xScale, yScale);
   renderChart(_data);
 
   // update annotation
@@ -436,7 +418,6 @@ function handleResize() {
   d3.select("svg").attr("width", width).attr("height", height);
 
   const _data = getDataPointsToRender(data, xScale, yScale);
-  updateMouseClickHandler(_data, xScale, yScale);
   renderChart(_data);
 }
 
