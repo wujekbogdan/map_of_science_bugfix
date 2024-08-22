@@ -7,6 +7,7 @@ const xScaleOriginal = d3.scaleLinear();
 const yScaleOriginal = d3.scaleLinear();
 let xScale = xScaleOriginal.copy();
 let yScale = yScaleOriginal.copy();
+let zoomTransform = d3.zoomIdentity;
 
 function parseKeyConceptsRaw(keyConceptsRaw) {
   return keyConceptsRaw.split(",");
@@ -114,82 +115,215 @@ function enableChartScreen() {
 
 function initChart(dataPoints) {
   enableChartScreen();
-  console.log("Data Points", dataPoints);
 
-  initScales();
-  //   transformLocalScaleDomains(d3.zoomIdentity);
+  const width = document.getElementById("chart-d3").clientWidth;
+  const height = document.getElementById("chart-d3").clientHeight;
+  updateGlobalScaleDomains(width, height);
+  transformLocalScaleDomains(d3.zoomIdentity);
+  updateScaleRanges(width, height);
 }
 
-function initScales() {
-  const { width, height } = getDimensions();
-  xScaleOriginal.range([0, width]);
-  yScaleOriginal.range([height, 0]);
-  xScaleOriginal.domain([-100, 100]);
-  yScaleOriginal.domain([-100, 100]);
+// Function to generate random data points
+function generateRandomData(numPoints) {
+  return Array.from({ length: numPoints }, () => ({
+    x: Math.random() * 1000 - 500,
+    y: Math.random() * 1000 - 500,
+  }));
+}
 
-  xScale = xScaleOriginal.copy();
-  yScale = yScaleOriginal.copy();
+function updateGlobalScaleDomains(chartWidth, chartHeight) {
+  // rescale the global domain to keep chart aspect ratio
+  xScaleOriginal.domain([-chartWidth / 2, chartWidth / 2]);
+  yScaleOriginal.domain([-chartHeight / 2, chartHeight / 2]);
+}
+
+function transformLocalScaleDomains(transform) {
+  // rescale to present the area which should be visible after zoom
+  const xRange = transform.rescaleX(xScaleOriginal).domain();
+  const yRange = transform.rescaleY(yScaleOriginal).domain();
+
+  xScale.domain(xRange);
+  yScale.domain(yRange);
+}
+
+function updateScaleRanges(chartWidth, chartHeight) {
+  const xRange = [0, chartWidth];
+  const yRange = [chartHeight, 0];
+  xScaleOriginal.range(xRange);
+  yScaleOriginal.range(yRange);
+  xScale.range(xRange);
+  yScale.range(yRange);
+}
+
+function isDataPointInDomain(dataPoint, xScale, yScale) {
+  const x = dataPoint.x;
+  const y = dataPoint.y;
+
+  const xDomain = xScale.domain();
+  const yDomain = yScale.domain();
+
+  if (x < xDomain[0] || x > xDomain[1] || y < yDomain[0] || y > yDomain[1]) {
+    return false;
+  }
+
+  return true;
+}
+
+function getDataPointsToRender(dataPointsSorted, xScale, yScale) {
+  const dataInDomain = dataPointsSorted.filter((d) =>
+    isDataPointInDomain(d, xScale, yScale)
+  );
+  const dataToRender = dataInDomain.slice(0, 300);
+  return dataToRender;
 }
 
 // ---------------------------------
-// enableLoadingScreen();
-// loadConcepts();
-// loadDataPoints();
-data = generateRandomData(1000);
-initChart(data);
+enableLoadingScreen();
+loadConcepts();
+loadDataPoints();
+initChart();
 // ---------------------------------
-
-function getDimensions() {
-  const chart = document.getElementById("chart-d3");
-  const width = chart.clientWidth;
-  const height = chart.clientHeight;
-  return { width, height };
-}
 
 // Create the SVG element with initial size
 const svg = d3
   .select("#chart-d3")
   .append("svg")
-  .attr("width", getDimensions()[0])
-  .attr("height", getDimensions()[1])
-  //   .attr("preserveAspectRatio", "xMinYMin meet")
+  .attr("width", document.getElementById("chart-d3").clientWidth)
+  .attr("height", document.getElementById("chart-d3").clientHeight)
   .call(
     d3
       .zoom()
-      .scaleExtent([0.5, 20]) // Zoom scale limits
+      //   .scaleExtent([0.5, 20]) // Zoom scale limits
       .on("zoom", zoomed)
   )
+  //   .call(responsivefy)
   .append("g");
 
 // Create a group for all plot elements
 const plotGroup = svg.append("g");
 
-// Function to generate random data points
-function generateRandomData(numPoints) {
-  return Array.from({ length: numPoints }, () => ({
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-  }));
-}
-
 // Initial render of the scatterplot
 function renderScatterPlot(data) {
-  const circles = plotGroup.selectAll("circle").data(data);
+  const shapes = plotGroup
+    .selectAll(".city-shape")
+    .data(data, (d) => d.clusterId);
 
   // ENTER phase for new data points
-  circles
-    .enter()
-    .append("circle")
-    .attr("cx", (d) => xScale(d.x))
-    .attr("cy", (d) => yScale(d.y))
-    .attr("r", 5)
-    .style("fill", "steelblue");
+  const newShapes = shapes.enter().append("g").attr("class", "city-shape");
+
+  // Append shapes depending on the city type
+  newShapes.each(function (d) {
+    const group = d3.select(this);
+
+    if (d.numRecentArticles <= 50) {
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 3)
+        .style("fill", "white")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+    } else if (d.numRecentArticles <= 200) {
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 4)
+        .style("fill", "white")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+    } else if (d.numRecentArticles <= 500) {
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 5)
+        .style("fill", "white")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 2)
+        .style("fill", "black")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+    } else if (d.numRecentArticles <= 1000) {
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 6)
+        .style("fill", "white")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 3)
+        .style("fill", "white")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+    } else if (d.numRecentArticles > 1000) {
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 7)
+        .style("fill", "white")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+
+      group
+        .append("circle")
+        .attr("cx", xScale(d.x))
+        .attr("cy", yScale(d.y))
+        .attr("r", 4)
+        .style("fill", "black")
+        .style("stroke", "black")
+        .style("stroke-width", 1);
+    }
+  });
 
   // UPDATE phase for existing data points
-  circles.attr("cx", (d) => xScale(d.x)).attr("cy", (d) => yScale(d.y));
+  shapes.each(function (d) {
+    const group = d3.select(this);
+
+    if (d.numRecentArticles <= 50) {
+      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+    } else if (d.numRecentArticles <= 200) {
+      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+    } else if (d.numRecentArticles <= 500) {
+      // two circles
+      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+      //   group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+    } else if (d.numRecentArticles <= 1000) {
+      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+    } else if (d.numRecentArticles > 1000) {
+      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+    }
+
+    // if (d.numRecentArticles < 100) {
+    //   group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+    // } else if (d.numRecentArticles < 1000) {
+    //   group
+    //     .select("rect")
+    //     .attr("x", xScale(d.x) - 5)
+    //     .attr("y", yScale(d.y) - 5);
+    // } else {
+    //   group
+    //     .select("path")
+    //     .attr("transform", `translate(${xScale(d.x)}, ${yScale(d.y)})`);
+    // }
+  });
 
   // EXIT phase for removed data points
-  circles.exit().remove();
+  shapes.exit().remove();
 }
 
 // Initial rendering of the scatterplot
@@ -197,41 +331,32 @@ renderScatterPlot(data);
 
 // Define the zoom function
 function zoomed(event) {
-  // Apply zoom transform to the scatterplot points
-  const newXScale = event.transform.rescaleX(xScale);
-  const newYScale = event.transform.rescaleY(yScale);
+  zoomTransform = event.transform;
+
+  const width = document.getElementById("chart-d3").clientWidth;
+  const height = document.getElementById("chart-d3").clientHeight;
+  updateGlobalScaleDomains(width, height);
+  transformLocalScaleDomains(zoomTransform);
+  updateScaleRanges(width, height);
 
   // Update points
   plotGroup
     .selectAll("circle")
-    .attr("cx", (d) => newXScale(d.x))
-    .attr("cy", (d) => newYScale(d.y));
-}
-
-// Handle window resizing
-window.addEventListener("resize", () => {
-  const dimensions = updateDimensions();
-  width = dimensions.width;
-  height = dimensions.height;
-
-  // Update the SVG dimensions and scales
-  d3.select("svg").attr("width", width).attr("height", height);
-
-  xScale.range([0, width]);
-  yScale.range([height, 0]);
-
-  // Update the position of circles based on new scale
-  plotGroup
-    .selectAll("circle")
     .attr("cx", (d) => xScale(d.x))
     .attr("cy", (d) => yScale(d.y));
+
+  const _data = getDataPointsToRender(data, xScale, yScale);
+  renderScatterPlot(_data);
+}
+
+window.addEventListener("resize", () => {
+  const width = document.getElementById("chart-d3").clientWidth;
+  const height = document.getElementById("chart-d3").clientHeight;
+  updateGlobalScaleDomains(width, height);
+  transformLocalScaleDomains(zoomTransform);
+  updateScaleRanges(width, height);
+  d3.select("svg").attr("width", width).attr("height", height);
+
+  const _data = getDataPointsToRender(data, xScale, yScale);
+  renderScatterPlot(_data);
 });
-
-// Function to update the data on button click
-// document.getElementById("updateData").addEventListener("click", () => {
-//   // Generate new random data
-//   data = generateRandomData(1000);
-
-//   // Re-render the scatterplot with new data
-//   renderScatterPlot(data);
-// });
