@@ -1,8 +1,12 @@
 import * as d3 from "d3";
+import Foreground0 from "../foreground-0.svg";
+import Foreground1 from "../foreground-1.svg";
+import Foreground2 from "../foreground-2.svg";
 
 let data = [];
 let concepts = {};
 let quadtree = null;
+let plotGroup = null;
 const xScaleOriginal = d3.scaleLinear();
 const yScaleOriginal = d3.scaleLinear();
 let xScale = xScaleOriginal.copy();
@@ -32,6 +36,44 @@ function parseDataPointItem(item) {
     clusterCategoryId: Number(item["cluster_category"]),
     keyConcepts: parseKeyConceptsRaw(item["key_concepts"]),
   };
+}
+
+function findClosestDataPoint(dataPoints, x, y, radius) {
+  dataPoints.sort((a, b) => {
+    const distA = Math.pow(a.x - x, 2) + Math.pow(a.y - y, 2);
+    const distB = Math.pow(b.x - x, 2) + Math.pow(b.y - y, 2);
+    return distA - distB;
+  });
+  const closestDataPoint = dataPoints[0];
+  const dist =
+    Math.pow(closestDataPoint.x - x, 2) + Math.pow(closestDataPoint.y - y, 2);
+
+  if (dist > radius * radius) {
+    return null;
+  }
+  return closestDataPoint;
+}
+
+function handleMouseClick(dataPoints, x, y, xScale, yScale) {
+  const closestDataPoint = findClosestDataPoint(dataPoints, x, y, 25);
+
+  if (!closestDataPoint) {
+    disableArticle();
+  } else {
+    enableArticle(closestDataPoint);
+  }
+}
+
+function updateMouseClickHandler(dataPoints, xScale, yScale) {
+  d3.select("#chart-d3").on("click", (eventMouse) =>
+    handleMouseClick(
+      dataPoints,
+      xScale.invert(eventMouse.offsetX),
+      yScale.invert(eventMouse.offsetY),
+      xScale,
+      yScale
+    )
+  );
 }
 
 function handleDataPointsLoaded(dataPoints) {
@@ -103,6 +145,26 @@ function loadConcepts() {
   );
 }
 
+function getClusterCategoryList() {
+  return [
+    "biology",
+    "chemistry",
+    "computer science",
+    "earth science",
+    "engineering",
+    "humanities",
+    "materials science",
+    "mathematics",
+    "medicine",
+    "physics",
+    "social science",
+  ];
+}
+
+function clusterCategoryIdToText(clusterCategoryId) {
+  return getClusterCategoryList()[clusterCategoryId];
+}
+
 function enableLoadingScreen() {
   document.getElementById("loading").style.display = "block";
   document.getElementById("chart").style.display = "none";
@@ -121,14 +183,50 @@ function initChart(dataPoints) {
   updateGlobalScaleDomains(width, height);
   transformLocalScaleDomains(d3.zoomIdentity);
   updateScaleRanges(width, height);
+
+  // foreground init
+  initForeground(0);
+  initForeground(1);
+  initForeground(2);
+
+  d3.select("#chart-d3")
+    .append("image")
+    .attr(
+      "xlink:href",
+      "https://upload.wikimedia.org/wikipedia/commons/d/d8/Compass_card_(de).svg"
+    )
+    .attr("width", 1000)
+    .attr("height", 1000);
+
+  const svg = buildChart();
+  // Create a group for all plot elements
+  plotGroup = svg.append("g");
+
+  const _data = getDataPointsToRender(data, xScale, yScale);
+  updateMouseClickHandler(_data, xScale, yScale);
+  renderChart(_data);
+
+  window.addEventListener("resize", handleResize);
 }
 
-// Function to generate random data points
-function generateRandomData(numPoints) {
-  return Array.from({ length: numPoints }, () => ({
-    x: Math.random() * 1000 - 500,
-    y: Math.random() * 1000 - 500,
-  }));
+function updateMouseMoveHandler(dataPoints, xScale, yScale) {
+  d3.select("#chart-d3").on("mousemove", (eventMouse) =>
+    handleMouseMove(eventMouse, dataPoints, xScale, yScale)
+  );
+}
+
+function handleMouseMove(eventPointer, dataPoints, xScale, yScale) {
+  const x = xScale.invert(eventPointer.offsetX);
+  const y = yScale.invert(eventPointer.offsetY);
+
+  dataPoints.sort((a, b) => {
+    const distA = Math.pow(a.x - x, 2) + Math.pow(a.y - y, 2);
+    const distB = Math.pow(b.x - x, 2) + Math.pow(b.y - y, 2);
+    return distA - distB;
+  });
+  const closestDataPoint = dataPoints[0];
+
+  updateAnnotation(closestDataPoint, xScale, yScale);
 }
 
 function updateGlobalScaleDomains(chartWidth, chartHeight) {
@@ -177,33 +275,25 @@ function getDataPointsToRender(dataPointsSorted, xScale, yScale) {
   return dataToRender;
 }
 
-// ---------------------------------
-enableLoadingScreen();
-loadConcepts();
-loadDataPoints();
-initChart();
-// ---------------------------------
-
-// Create the SVG element with initial size
-const svg = d3
-  .select("#chart-d3")
-  .append("svg")
-  .attr("width", document.getElementById("chart-d3").clientWidth)
-  .attr("height", document.getElementById("chart-d3").clientHeight)
-  .call(
+function buildChart() {
+  return (
     d3
-      .zoom()
-      //   .scaleExtent([0.5, 20]) // Zoom scale limits
-      .on("zoom", zoomed)
-  )
-  //   .call(responsivefy)
-  .append("g");
+      .select("#chart-d3")
+      .append("svg")
+      .attr("width", document.getElementById("chart-d3").clientWidth)
+      .attr("height", document.getElementById("chart-d3").clientHeight)
+      .call(d3.zoom().scaleExtent([0.5, 75]).on("zoom", handleZoom))
+      /**
+       * Below line fixes error with:
+       * (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
+       * TypeError: (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
+       */
+      .on("dblclick.zoom", null)
+      .append("g")
+  );
+}
 
-// Create a group for all plot elements
-const plotGroup = svg.append("g");
-
-// Initial render of the scatterplot
-function renderScatterPlot(data) {
+function renderChart(data) {
   const shapes = plotGroup
     .selectAll(".city-shape")
     .data(data, (d) => d.clusterId);
@@ -295,61 +385,49 @@ function renderScatterPlot(data) {
     const group = d3.select(this);
 
     if (d.numRecentArticles <= 50) {
-      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+      group.selectAll("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
     } else if (d.numRecentArticles <= 200) {
-      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+      group.selectAll("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
     } else if (d.numRecentArticles <= 500) {
       // two circles
-      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+      group.selectAll("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
       //   group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
     } else if (d.numRecentArticles <= 1000) {
-      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+      group.selectAll("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
     } else if (d.numRecentArticles > 1000) {
-      group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
+      group.selectAll("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
     }
-
-    // if (d.numRecentArticles < 100) {
-    //   group.select("circle").attr("cx", xScale(d.x)).attr("cy", yScale(d.y));
-    // } else if (d.numRecentArticles < 1000) {
-    //   group
-    //     .select("rect")
-    //     .attr("x", xScale(d.x) - 5)
-    //     .attr("y", yScale(d.y) - 5);
-    // } else {
-    //   group
-    //     .select("path")
-    //     .attr("transform", `translate(${xScale(d.x)}, ${yScale(d.y)})`);
-    // }
   });
 
   // EXIT phase for removed data points
   shapes.exit().remove();
 }
 
-// Initial rendering of the scatterplot
-renderScatterPlot(data);
-
-// Define the zoom function
-function zoomed(event) {
+function handleZoom(event) {
   zoomTransform = event.transform;
 
+  // update scales
   const width = document.getElementById("chart-d3").clientWidth;
   const height = document.getElementById("chart-d3").clientHeight;
   updateGlobalScaleDomains(width, height);
   transformLocalScaleDomains(zoomTransform);
   updateScaleRanges(width, height);
 
-  // Update points
-  plotGroup
-    .selectAll("circle")
-    .attr("cx", (d) => xScale(d.x))
-    .attr("cy", (d) => yScale(d.y));
-
+  // update points
   const _data = getDataPointsToRender(data, xScale, yScale);
-  renderScatterPlot(_data);
+  updateMouseClickHandler(_data, xScale, yScale);
+  renderChart(_data);
+
+  // update annotation
+  updateAnnotation(null, xScale, yScale);
+
+  // update foreground
+  updateForeground(0, xScale, yScale, zoomTransform.k);
+  updateForeground(1, xScale, yScale, zoomTransform.k);
+  updateForeground(2, xScale, yScale, zoomTransform.k);
 }
 
-window.addEventListener("resize", () => {
+function handleResize() {
   const width = document.getElementById("chart-d3").clientWidth;
   const height = document.getElementById("chart-d3").clientHeight;
   updateGlobalScaleDomains(width, height);
@@ -358,5 +436,184 @@ window.addEventListener("resize", () => {
   d3.select("svg").attr("width", width).attr("height", height);
 
   const _data = getDataPointsToRender(data, xScale, yScale);
-  renderScatterPlot(_data);
-});
+  updateMouseClickHandler(_data, xScale, yScale);
+  renderChart(_data);
+}
+
+function disableArticle() {
+  const article = document.getElementById("article");
+  article.style.visibility = "hidden";
+}
+
+function enableArticle(dataPoint) {
+  const article = document.getElementById("article");
+  buildArticle(dataPoint);
+  article.style.visibility = "visible";
+}
+
+function buildArticle(dataPoint) {
+  const article = document.getElementById("article-content");
+  const url =
+    "https://sciencemap.eto.tech/cluster/?version=2&cluster_id=" +
+    dataPoint.clusterId;
+
+  article.innerHTML = buildArticleContent(dataPoint, url);
+
+  const articleClose = document.getElementById("article-close");
+  articleClose.onclick = () => {
+    disableArticle();
+  };
+
+  const articleOpen = document.getElementById("article-open");
+  articleOpen.onclick = () => {
+    window.open(url, "_blank");
+  };
+}
+
+function buildArticleContent(dataPoint, url) {
+  const html =
+    buildDataPointDetails(dataPoint) +
+    "<strong>More details from ETO</strong><br />" +
+    "<iframe src='" +
+    url +
+    "' width='100%' height='100%'></iframe>";
+
+  return html;
+}
+
+function buildAnnotation(dataPoint) {
+  const annotation = document.getElementById("annotation-body");
+
+  annotation.innerHTML = buildDataPointDetails(dataPoint);
+}
+
+function enableAnnotation(dataPoint, xScale, yScale) {
+  const annotation = document.getElementById("annotation");
+
+  const x = xScale(dataPoint.x);
+  const y = yScale(dataPoint.y);
+
+  annotation.style.visibility = "visible";
+  annotation.style.top = y + "px";
+  annotation.style.left = x + "px";
+}
+
+function disableAnnotation() {
+  const annotation = document.getElementById("annotation");
+  annotation.style.visibility = "hidden";
+}
+
+function updateAnnotation(dataPoint, xScale, yScale) {
+  if (dataPoint == null) {
+    disableAnnotation();
+  } else {
+    buildAnnotation(dataPoint);
+    enableAnnotation(dataPoint, xScale, yScale);
+  }
+}
+
+function buildDataPointDetails(dataPoint) {
+  let html = "";
+
+  // cluster id
+  html += "<strong>#" + dataPoint.clusterId + "</strong>" + "<br />";
+
+  // cluster category
+  html += clusterCategoryIdToText(dataPoint.clusterCategoryId) + "<br />";
+
+  // number of articles
+  if (dataPoint.numRecentArticles <= 100) {
+    html += "<span class='few-articles'>";
+  } else if (dataPoint.numRecentArticles >= 1000) {
+    html += "<span class='many-articles'>";
+  } else {
+    html += "<span>";
+  }
+  html += "articles: " + dataPoint.numRecentArticles + "</span><br />";
+
+  // growth rating
+  if (dataPoint.growthRating >= 80) {
+    html += "<span class='many-articles'>";
+  } else {
+    html += "<span>";
+  }
+  html += "growth: " + dataPoint.growthRating + "</span><br />";
+
+  // key concepts
+
+  html += "<br /><strong>key concepts:</strong><ul>";
+
+  for (const concept_id of dataPoint.keyConcepts) {
+    html += "<li>" + concepts[Number(concept_id)] + "</li>";
+  }
+
+  html += "</ul>";
+  return html;
+}
+
+function initForeground(index) {
+  const outer = document.getElementById("chart-foreground-" + index);
+  const svg = outer.getElementsByTagName("svg")[0];
+  svg.id = outer.id + "-content";
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", "100%");
+  svg.setAttribute("viewBox", "0 0 100 100");
+
+  const initialZoom = 1.0;
+  updateForeground(index, xScale, yScale, initialZoom);
+}
+
+function calcForegroundVisibility(k, kStart, kStop, kRadius) {
+  if (k <= kStart) {
+    return 0.0;
+  } else if (kStart < k && k <= kStart + kRadius) {
+    return (k - kStart) / kRadius;
+  } else if (kStart + kRadius < k && k <= kStop - kRadius) {
+    return 1.0;
+  } else if (kStop - kRadius < k && k <= kStop) {
+    return (kStop - k) / kRadius;
+  } else {
+    return 0.0;
+  }
+}
+
+function updateForegroundVisibility(index, element, kZoom) {
+  if (kZoom == null || kZoom <= 0) {
+    return;
+  }
+
+  if (index == 0) {
+    element.style.opacity = calcForegroundVisibility(kZoom, -100, 10.0, 3.0);
+  } else if (index == 1) {
+    element.style.opacity = calcForegroundVisibility(kZoom, 1.0, 15.0, 3.0);
+  } else if (index == 2) {
+    element.style.opacity = calcForegroundVisibility(kZoom, 4.0, 100.0, 3.0);
+  }
+}
+
+function updateForeground(index, xScale, yScale, kZoom) {
+  const svg = document.getElementById("chart-foreground-" + index + "-content");
+  updateForegorundScaling(svg, xScale, yScale);
+  updateForegroundVisibility(index, svg, kZoom);
+}
+
+function updateForegorundScaling(element, xScale, yScale) {
+  const width = xScale.domain()[1] - xScale.domain()[0];
+  const height = yScale.domain()[1] - yScale.domain()[0];
+  const x = xScale.domain()[0];
+  const y = yScale.domain()[0];
+
+  // we need to convert to the SVG coordinate system
+  const y_prim = -y - height;
+
+  element.viewBox.baseVal.x = x;
+  element.viewBox.baseVal.y = y_prim;
+  element.viewBox.baseVal.width = width;
+  element.viewBox.baseVal.height = height;
+}
+
+// ---------------------------------
+enableLoadingScreen();
+loadConcepts();
+loadDataPoints();
+// ---------------------------------

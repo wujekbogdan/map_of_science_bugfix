@@ -20,7 +20,7 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 20;
+        z-index: 3;
         visibility: hidden;
         pointer-events: none;
       }
@@ -33,7 +33,7 @@
         position: absolute;
         top: 33px;
         left: 33px;
-        z-index: 20;
+        z-index: 3;
         display: inline-table;
         height: auto;
         white-space: nowrap;
@@ -90,7 +90,7 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
-        z-index: 0;
+        z-index: -1;
       }
 
       #chart-foreground-1 {
@@ -100,7 +100,7 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
-        z-index: 0;
+        z-index: -1;
       }
 
       #chart-foreground-2 {
@@ -110,15 +110,16 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
-        z-index: 0;
+        z-index: -1;
       }
 
       #chart {
+        z-index: 5;
         position: relative; /* for annotation */
         display: none;
         width: 100%;
         height: 100%;
-        background-color: white;
+        background-color: lightblue;
       }
       /**
         * d3fc enforces some styles that we need to override here because they don't match our styles.
@@ -154,8 +155,6 @@
         top: 0; */
         width: 100%;
         height: 100vh;
-        /* z-index: 1000; */
-        /* background-color: #aad3df; */
       }
     </style>
   </head>
@@ -180,7 +179,7 @@
       <!-- d3 plane -->
       <div id="chart-d3"></div>
       <!-- custom svg plane -->
-      <!-- <div id="chart-foreground-0">
+      <div id="chart-foreground-0">
         <%= htmlWebpackPlugin.options.foreground0Svg %>
       </div>
       <div id="chart-foreground-1">
@@ -188,7 +187,7 @@
       </div>
       <div id="chart-foreground-2">
         <%= htmlWebpackPlugin.options.foreground2Svg %>
-      </div> -->
+      </div>
       <!-- annotation -->
       <div id="annotation">
         <div id="annotation-connection">
