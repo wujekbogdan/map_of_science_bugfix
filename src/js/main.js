@@ -1,7 +1,6 @@
 import * as d3 from "d3";
-import Foreground0 from "../foreground-0.svg";
-import Foreground1 from "../foreground-1.svg";
-import Foreground2 from "../foreground-2.svg";
+import * as foreground from "./foreground";
+import * as params from "./params";
 
 let data = [];
 let concepts = {};
@@ -11,6 +10,7 @@ const xScaleOriginal = d3.scaleLinear();
 const yScaleOriginal = d3.scaleLinear();
 let xScale = xScaleOriginal.copy();
 let yScale = yScaleOriginal.copy();
+
 let zoomTransform = d3.zoomIdentity;
 
 function parseKeyConceptsRaw(keyConceptsRaw) {
@@ -173,9 +173,7 @@ function initChart(dataPoints) {
   updateScaleRanges(width, height);
 
   // foreground init
-  initForeground(0);
-  initForeground(1);
-  initForeground(2);
+  foreground.initForeground(xScale, yScale);
 
   const svg = buildChart();
   // Create a group for all plot elements
@@ -260,7 +258,12 @@ function buildChart() {
       .append("svg")
       .attr("width", document.getElementById("chart-d3").clientWidth)
       .attr("height", document.getElementById("chart-d3").clientHeight)
-      .call(d3.zoom().scaleExtent([0.5, 75]).on("zoom", handleZoom))
+      .call(
+        d3
+          .zoom()
+          .scaleExtent([params.zoomMin, params.zoomMax])
+          .on("zoom", handleZoom)
+      )
       /**
        * Below line fixes error with:
        * (0 , d3_selection__WEBPACK_IMPORTED_MODULE_7__.default)(...).transition is not a function
@@ -404,9 +407,7 @@ function handleZoom(event) {
   updateAnnotation(null, xScale, yScale);
 
   // update foreground
-  updateForeground(0, xScale, yScale, zoomTransform.k);
-  updateForeground(1, xScale, yScale, zoomTransform.k);
-  updateForeground(2, xScale, yScale, zoomTransform.k);
+  foreground.updateForeground(xScale, yScale, zoomTransform.k);
 }
 
 function handleResize() {
@@ -530,67 +531,6 @@ function buildDataPointDetails(dataPoint) {
 
   html += "</ul>";
   return html;
-}
-
-function initForeground(index) {
-  const outer = document.getElementById("chart-foreground-" + index);
-  const svg = outer.getElementsByTagName("svg")[0];
-  svg.id = outer.id + "-content";
-  svg.setAttribute("width", "100%");
-  svg.setAttribute("height", "100%");
-  svg.setAttribute("viewBox", "0 0 100 100");
-
-  const initialZoom = 1.0;
-  updateForeground(index, xScale, yScale, initialZoom);
-}
-
-function calcForegroundVisibility(k, kStart, kStop, kRadius) {
-  if (k <= kStart) {
-    return 0.0;
-  } else if (kStart < k && k <= kStart + kRadius) {
-    return (k - kStart) / kRadius;
-  } else if (kStart + kRadius < k && k <= kStop - kRadius) {
-    return 1.0;
-  } else if (kStop - kRadius < k && k <= kStop) {
-    return (kStop - k) / kRadius;
-  } else {
-    return 0.0;
-  }
-}
-
-function updateForegroundVisibility(index, element, kZoom) {
-  if (kZoom == null || kZoom <= 0) {
-    return;
-  }
-
-  if (index == 0) {
-    element.style.opacity = calcForegroundVisibility(kZoom, -100, 10.0, 3.0);
-  } else if (index == 1) {
-    element.style.opacity = calcForegroundVisibility(kZoom, 1.0, 15.0, 3.0);
-  } else if (index == 2) {
-    element.style.opacity = calcForegroundVisibility(kZoom, 4.0, 100.0, 3.0);
-  }
-}
-
-function updateForeground(index, xScale, yScale, kZoom) {
-  const svg = document.getElementById("chart-foreground-" + index + "-content");
-  updateForegorundScaling(svg, xScale, yScale);
-  updateForegroundVisibility(index, svg, kZoom);
-}
-
-function updateForegorundScaling(element, xScale, yScale) {
-  const width = xScale.domain()[1] - xScale.domain()[0];
-  const height = yScale.domain()[1] - yScale.domain()[0];
-  const x = xScale.domain()[0];
-  const y = yScale.domain()[0];
-
-  // we need to convert to the SVG coordinate system
-  const y_prim = -y - height;
-
-  element.viewBox.baseVal.x = x;
-  element.viewBox.baseVal.y = y_prim;
-  element.viewBox.baseVal.width = width;
-  element.viewBox.baseVal.height = height;
 }
 
 // ---------------------------------
