@@ -1,8 +1,9 @@
 import * as d3 from "d3";
 import Foreground from "../../asset/foreground.svg";
 import { zoomMax } from "./params";
+import * as labels from "./labels";
 
-export function initForeground(xScale, yScale) {
+export function initForeground(xScale, yScale, kZoom) {
   selectForegroundSvg()
     .attr("width", "100%")
     .attr("height", "100%")
@@ -10,14 +11,17 @@ export function initForeground(xScale, yScale) {
 
   const initialZoom = 1.0;
   updateForeground(xScale, yScale, initialZoom);
+
+  labels.initLabels(xScale, yScale, kZoom);
 }
 
 export function updateForeground(xScale, yScale, kZoom) {
   updateForegroundScaling(xScale, yScale);
   updateForegroundVisibility(kZoom);
+  labels.updateLabels(xScale, yScale, kZoom);
 }
 
-function selectForegroundSvg() {
+export function selectForegroundSvg() {
   return d3.select("#chart").select("#foreground").select("svg");
 }
 
@@ -59,7 +63,6 @@ function updateForegroundVisibility(kZoom) {
       index == no - 1 ? zoomMax + radius : layerMaxZoom,
       radius
     );
-    console.log(index, visibility);
     setForegroundLayerVisibility(layer, visibility);
   });
 }
@@ -68,7 +71,7 @@ function sortForegroundLayers(layers) {
   return layers.sort((a, b) => a.id.localeCompare(b.id));
 }
 
-function getForegroundLayers() {
+export function getForegroundLayers() {
   const layers = selectForegroundSvg()
     .selectAll(":scope > g")
     .filter(function () {
