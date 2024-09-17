@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import { getForegroundLayers, getForegroundVisibilities } from "./foreground";
+import * as article from "./article";
 
 class Label {
   constructor(html, x, y) {
@@ -44,7 +45,7 @@ export function updateLabels(xScale, yScale, kZoom) {
           .style("left", xMoved + "px")
           .style("top", yMoved + "px")
           .style("opacity", visibilities[layer_no])
-          .on("click", () => handleClickLabel(label))
+          .on("click", () => handleClickLabel(labels[index]))
           .on("mouseover", () => handleHoverInLabel(label))
           .on("mouseout", () => handleHoverOutLabel(label));
       });
@@ -104,6 +105,8 @@ function getLabelFromSvgElement(svgElement) {
 
 function handleClickLabel(label) {
   console.log(label);
+  const labelId = label.innerHTML;
+  article.enableLabelArticle(labelId);
 }
 
 function handleHoverInLabel(selection) {
