@@ -1,5 +1,3 @@
-#test
-
 # Map of Science
 
 Discover the landscape of human knowledge through an interactive map. 
@@ -78,7 +76,7 @@ This application draws inspiration from the data set behind (yet another) *Map o
 
 ### Notes
 - The original, ETO's dataset is publicly [available here](https://doi.org/10.5281/zenodo.12628195).  
-- The sources and methodology behind the dataset is described in detail in the [ETO's docs](https://eto.tech/tool-docs/mos/#sources-and-methodology).
+- The sources and methodology behind the dataset is described in detail in the [ETO's Research Cluster Dataset Documentation](https://eto.tech/dataset-docs/mac-clusters/#overview)
 - The dataset is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 
 ### Citation
