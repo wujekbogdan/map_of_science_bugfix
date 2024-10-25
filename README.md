@@ -32,7 +32,7 @@ npm -v
     ```
 4. Start the application locally:
     ```bash
-    npm start
+    npm run start
     ```
 5. Open the application in the browser at the address displayed in the logs, probably [http://localhost:8080/](http://localhost:8080/)
 
@@ -64,7 +64,7 @@ Hidden layers in Inkscape are ignored by the application.
 The application uses HTML files to dynamically load article content. They are located in the `articles` directory. Each article is a separate file, named after the **label** of the object it describes. 
 
 Labels are converted to filenames by skipping the first `#` character, replacing non-alphanumeric characters with underscores. For example:
-- `#Material Science` -> `photonics.html` 
+- `#Material Science` -> `material_science.html` 
 - `#Zażółć Jaźń` -> `za_____ja__.html`
 
 The article files can contain any HTML content, including images, links, and other media. They will be displayed in a modal window when the user clicks on the object with the corresponding label.
