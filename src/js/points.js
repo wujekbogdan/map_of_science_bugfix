@@ -3,6 +3,7 @@ import * as chart from "./chart";
 
 export let data = [];
 let concepts = {};
+// eslint-disable-next-line no-unused-vars
 let quadtree = null;
 
 function parseKeyConceptsRaw(keyConceptsRaw) {
@@ -13,6 +14,7 @@ function parseConceptItem(item) {
   concepts[item["index"]] = item["key"];
 }
 
+// eslint-disable-next-line no-unused-vars
 function handleConceptsLoaded(conceptData) {
   console.log("Concepts Loaded");
   //   concepts = conceptData;
@@ -30,6 +32,7 @@ function parseDataPointItem(item) {
   };
 }
 
+// eslint-disable-next-line no-unused-vars
 function findClosestDataPoint(dataPoints, x, y, radius) {
   dataPoints.sort((a, b) => {
     const distA = Math.pow(a.x - x, 2) + Math.pow(a.y - y, 2);
@@ -131,10 +134,11 @@ function buildLoaderWorker() {
 }
 
 function handleLoaderWorkerMessage(
+  // eslint-disable-next-line no-unused-vars
   { data: { items, totalBytes, finished } },
   parseItem,
   dataTarget,
-  onLoaded
+  onLoaded,
 ) {
   const rows = items.map(parseItem);
 
@@ -161,7 +165,7 @@ export function loadDataPoints() {
     new URL("../../asset/data.tsv", import.meta.url),
     parseDataPointItem,
     data, // Separate array for data points
-    handleDataPointsLoaded
+    handleDataPointsLoaded,
   );
 }
 
@@ -170,6 +174,6 @@ export function loadConcepts() {
     new URL("../../asset/keys.tsv", import.meta.url),
     parseConceptItem,
     [], // We don't need to store the concepts in an array, they go to the `concepts` object
-    handleConceptsLoaded
+    handleConceptsLoaded,
   );
 }
