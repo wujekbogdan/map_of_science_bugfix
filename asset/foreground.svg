@@ -40,9 +40,9 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
      showborder="false"
      borderlayer="false"
      shape-rendering="auto"
-     inkscape:zoom="9.7370352"
-     inkscape:cx="-46.677453"
-     inkscape:cy="-152.66454"
+     inkscape:zoom="13.770247"
+     inkscape:cx="110.49184"
+     inkscape:cy="-188.99443"
      inkscape:window-width="3360"
      inkscape:window-height="1780"
      inkscape:window-x="6708"
@@ -304,7 +304,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
        inkscape:label="#Paliwa i odpady" />
     <path
        class="fil0"
-       d="m 108.46103,-221.33127 c -30.06011,-11.78903 -48.74897,-19.53777 -56.62425,12.4189 -2.65496,10.76915 -2.65715,16.16883 3.6446,26.90281 5.87006,9.99861 12.21115,9.53375 23.02474,13.84818 13.730849,5.47768 15.617495,19.81685 26.40376,22.27908 4.93096,1.12539 20.00438,1.13815 26.55559,2.41277 10.37478,2.01812 22.68192,-4.79355 29.09214,-12.57205 4.64326,-5.63323 10.51123,-17.24291 9.18662,-25.08092 -2.8741,-17.02098 -44.40557,-33.58947 -61.2832,-40.20877 z"
+       d="m 108.46103,-221.33127 c -27.95412,-0.31502 -37.274957,-2.39937 -46.675264,16.04992 -2.65496,10.76915 -6.215546,13.11877 0.0862,23.85275 5.87006,9.99861 5.82056,8.95279 16.63415,13.26722 13.730849,5.47768 15.617495,19.81685 26.40376,22.27908 4.93096,1.12539 20.00438,1.13815 26.55559,2.41277 10.37478,2.01812 22.68192,-4.79355 29.09214,-12.57205 4.64326,-5.63323 10.51123,-17.24291 9.18662,-25.08092 -2.8741,-17.02098 -44.40557,-33.58947 -61.2832,-40.20877 z"
        id="path25"
        style="clip-rule:evenodd;display:inline;fill:#bbe9ab;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-dasharray:none;stroke-opacity:0.609571;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        inkscape:label="#Rośliny"
@@ -869,46 +869,6 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          x="-131.14706"
          y="-191.24963"
          inkscape:label="#Roślinność, lasy, pożary" />
-      <rect
-         style="display:inline;fill:#000000"
-         id="rect121"
-         width="6.0274882"
-         height="6.172729"
-         x="-80.094971"
-         y="-195.09978"
-         inkscape:label="#Jakość wody, mikroorganizmy wodne" />
-      <rect
-         style="display:inline;fill:#000000"
-         id="rect122"
-         width="6.0274882"
-         height="6.172729"
-         x="-64.587173"
-         y="-154.43031"
-         inkscape:label="#Życie w oceanach i rybołówstwo" />
-      <rect
-         style="display:inline;fill:#000000"
-         id="rect123"
-         width="6.0274882"
-         height="6.172729"
-         x="-47.128059"
-         y="-174.35425"
-         inkscape:label="#Ekosystemy dna oceanu" />
-      <rect
-         style="display:inline;fill:#000000"
-         id="rect124"
-         width="6.0274882"
-         height="6.172729"
-         x="-33.058067"
-         y="-146.93317"
-         inkscape:label="#Biogeografia" />
-      <rect
-         style="display:inline;fill:#000000"
-         id="rect125"
-         width="6.0274882"
-         height="6.172729"
-         x="-35.933685"
-         y="-127.31734"
-         inkscape:label="#Ekologia i zachowania zwierząt" />
     </g>
     <g
        inkscape:groupmode="layer"
@@ -940,12 +900,52 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          inkscape:label="#Religie" />
       <rect
          style="display:inline;fill:#000000"
+         id="rect125"
+         width="6.0274882"
+         height="6.172729"
+         x="-35.933685"
+         y="-127.31734"
+         inkscape:label="#Ekologia i zachowania zwierząt" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect123"
+         width="6.0274882"
+         height="6.172729"
+         x="-47.128059"
+         y="-174.35425"
+         inkscape:label="#Ekosystemy dna oceanu" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect122"
+         width="6.0274882"
+         height="6.172729"
+         x="-64.587173"
+         y="-154.43031"
+         inkscape:label="#Życie w oceanach i rybołówstwo" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect121"
+         width="6.0274882"
+         height="6.172729"
+         x="-80.094971"
+         y="-195.09978"
+         inkscape:label="#Jakość wody, mikroorganizmy wodne" />
+      <rect
+         style="display:inline;fill:#000000"
          id="rect45"
          width="6.0274882"
          height="6.172729"
          x="-73.659363"
          y="29.935848"
          inkscape:label="#Świat nowożytny" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect124"
+         width="6.0274882"
+         height="6.172729"
+         x="-33.058067"
+         y="-146.93317"
+         inkscape:label="#Biogeografia" />
       <rect
          style="display:inline;fill:#000000"
          id="rect46"
@@ -1492,9 +1492,9 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect105"
          width="6.0274882"
          height="6.172729"
-         x="63.014885"
-         y="-226.29102"
-         inkscape:label="#Naturalna promieniotwórczość" />
+         x="79.499702"
+         y="-206.68353"
+         inkscape:label="#Zdrowie gleby, kompost" />
       <rect
          style="display:inline;fill:#000000"
          id="rect108"
@@ -1519,6 +1519,22 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          x="106.95205"
          y="-109.14204"
          inkscape:label="#Pestycydy" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect126"
+         width="6.0274882"
+         height="6.172729"
+         x="60.037453"
+         y="-224.54814"
+         inkscape:label="#Metale ciężkie w środowisku" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect127"
+         width="6.0274882"
+         height="6.172729"
+         x="116.68131"
+         y="-196.37144"
+         inkscape:label="#Wzrost i odporność roślin na stres" />
     </g>
   </g>
 </svg>
