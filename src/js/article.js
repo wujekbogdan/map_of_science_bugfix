@@ -1,15 +1,36 @@
 import * as points from "./points";
 import { PATH_TO_ARTICLES } from "./config";
 
+function disableArticleAnimation(article) {
+  article.classList.remove("animate__animated");
+  article.classList.remove("animate__fadeInRight");
+  article.classList.remove("animate__faster");
+}
+
+function enableArticleAnimation(article) {
+  article.classList.add("animate__animated");
+  article.classList.add("animate__fadeInRight");
+  article.classList.add("animate__faster");
+}
+
 export function disableArticle() {
   const article = document.getElementById("article");
   article.style.visibility = "hidden";
+  disableArticleAnimation(article);
 }
 
 export function enableArticle(dataPoint) {
   const article = document.getElementById("article");
   buildArticle(dataPoint);
   article.style.visibility = "visible";
+  enableArticleAnimation(article);
+}
+
+export function enableLabelArticle(labelText) {
+  const article = document.getElementById("article");
+  buildLabelArticle(labelText);
+  article.style.visibility = "visible";
+  enableArticleAnimation(article);
 }
 
 function buildArticle(dataPoint) {
@@ -87,10 +108,4 @@ function buildLabelArticle(labelText) {
   articleOpen.onclick = () => {
     window.open("", "_blank");
   };
-}
-
-export function enableLabelArticle(labelText) {
-  const article = document.getElementById("article");
-  buildLabelArticle(labelText);
-  article.style.visibility = "visible";
 }

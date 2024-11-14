@@ -7,6 +7,8 @@ import "../css/common.css";
 import "../css/content.css";
 import "../css/labels.css";
 
+import "animate.css";
+
 function enableLoadingScreen() {
   document.getElementById("loading").style.display = "block";
   document.getElementById("chart").style.display = "none";
