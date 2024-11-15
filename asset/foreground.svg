@@ -40,15 +40,15 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
      showborder="false"
      borderlayer="false"
      shape-rendering="auto"
-     inkscape:zoom="9.737035"
-     inkscape:cx="170.32906"
-     inkscape:cy="72.763423"
+     inkscape:zoom="4.8685175"
+     inkscape:cx="5.8539381"
+     inkscape:cy="40.977566"
      inkscape:window-width="3840"
      inkscape:window-height="2050"
      inkscape:window-x="-12"
      inkscape:window-y="-12"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer10"
+     inkscape:current-layer="layer1"
      showguides="false" />
   <defs
      id="defs1">
@@ -173,7 +173,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
        inkscape:label="#Komputery i komunikacja" />
     <path
        class="fil0"
-       d="m 212.20335,-34.669026 c -8.94654,-4.860515 -8.34878,-13.962352 -20.30352,-17.040296 -6.83225,-1.588798 -7.73113,24.862583 -9.44043,32.185241 -0.91912,3.589416 -12.91418,41.83288 -12.31339,46.260924 -2.61538,7.304134 19.48834,50.534549 22.04927,61.700017 4.02708,17.55617 -29.58143,63.77155 -32.34974,73.59979 -18.4951,65.66254 10.72864,56.142 23.21561,59.59227 14.33575,5.60769 14.76067,-36.63288 22.29515,-53.71271 4.65662,-10.49641 23.04265,-48.55132 26.07288,-52.25861 12.19877,-12.18611 17.02906,-33.110125 34.2917,-42.815738 9.93192,-6.414989 28.04278,-37.514535 21.18502,-48.544315 -3.01256,-9.444589 -27.73993,-28.7133653 -36.27902,-34.843559 -11.07141,-4.713332 -28.18296,-16.820852 -38.42353,-24.123014 z"
+       d="m 212.20335,-34.669026 c -8.94654,-4.860515 -8.34878,-13.962352 -20.30352,-17.040296 -6.83225,-1.588798 -7.73113,24.862583 -9.44043,32.185241 -0.91912,3.589416 -12.60608,53.335355 -14.3674,63.103834 1.38994,17.368799 45.26621,29.789013 37.65977,56.15418 -8.1943,28.134337 -49.42526,75.315347 -51.96557,85.204967 -7.71153,30.02157 7.2021,30.62542 19.68907,34.07569 23.63115,9.96491 24.34655,-34.01855 31.88103,-51.09838 4.65662,-10.49641 23.04265,-48.55132 26.07288,-52.25861 12.19877,-12.18611 17.02906,-33.110125 34.2917,-42.815738 9.93192,-6.414989 28.04278,-37.514535 21.18502,-48.544315 -3.01256,-9.444589 -27.73993,-28.7133653 -36.27902,-34.843559 -11.07141,-4.713332 -28.18296,-16.820852 -38.42353,-24.123014 z"
        id="path2"
        style="clip-rule:evenodd;display:inline;fill:#bbe9ab;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.160109;stroke-dasharray:none;stroke-opacity:0.609571;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        inkscape:label="#Bakterie i choroby zakaźne"
@@ -200,7 +200,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
        sodipodi:nodetypes="cccccccc" />
     <path
        class="fil0"
-       d="m 131.23959,22.578128 c -3.02574,-3.68951 -12.5475,-11.518504 -16.44511,-11.946835 -5.62551,-0.6186 -9.01,-0.559987 -13.86282,4.950157 -4.509096,5.119685 -6.608315,19.535963 -6.275249,28.016921 0.392904,10.002662 5.679049,19.871582 11.539539,19.778251 5.13589,-0.08161 8.73943,-4.170144 12.49496,-6.795904 5.65403,-8.7715 9.43497,-7.92908 13.361,-18.546285 2.33638,-6.318562 2.29074,-5.784585 0.72514,-12.937266 -0.0882,-0.402181 -1.43281,-2.391441 -1.53746,-2.519039 z"
+       d="m 131.23959,22.578128 c -3.02574,-3.68951 -12.5475,-11.518504 -16.44511,-11.946835 -5.62551,-0.6186 -9.01,-0.559987 -13.86282,4.950157 -4.509096,5.119685 -6.608315,19.535963 -6.275249,28.016921 0.392904,10.002662 1.622373,21.668844 7.482859,21.575513 5.13589,-0.08161 11.61505,-6.63496 15.37058,-9.26072 6.62969,-7.487742 9.58902,-8.288533 14.54206,-17.878731 2.33638,-6.318562 2.29074,-5.784585 0.72514,-12.937266 -0.0882,-0.402181 -1.43281,-2.391441 -1.53746,-2.519039 z"
        id="path6"
        style="clip-rule:evenodd;display:inline;fill:#bbe9ab;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-dasharray:none;stroke-opacity:0.609571;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        inkscape:label="#Rozmnażanie ludzi i zwierząt"
@@ -313,7 +313,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
        sodipodi:nodetypes="ccscccccc" />
     <path
        class="fil0"
-       d="m 94.257772,-15.163395 c -2.285326,6.5631791 -8.924207,14.8596168 1.781725,19.0441878 13.286303,5.193629 27.906793,6.3961122 39.651813,4.42669 9.56055,-1.604213 17.21643,-5.311758 20.69628,-10.682581 5.95145,-14.2566668 6.99488,-31.4662818 -5.79726,-40.2724108 -19.77726,-1.980961 -43.94615,8.011882 -56.332558,27.484114 z"
+       d="m 111.46013,-22.660544 c -2.28532,6.563179 -22.891494,19.1730451 -12.185562,23.3576161 13.286302,5.193629 24.671722,9.5798329 36.416742,7.6104107 9.56055,-1.604213 17.21643,-5.311758 20.69628,-10.682581 5.95145,-14.2566668 4.63276,-30.2852238 -8.15938,-39.0913528 -13.30711,-1.77556 -24.38167,-0.666325 -36.76808,18.805907 z"
        id="path26"
        style="clip-rule:evenodd;display:inline;fill:#bbe9ab;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-dasharray:none;stroke-opacity:0.609571;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        inkscape:label="#Hodowla zwierząt"
@@ -1814,8 +1814,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect181"
          width="6.0274882"
          height="6.172729"
-         x="243.90926"
-         y="55.541203"
+         x="241.85524"
+         y="49.07106"
          inkscape:label="#Gruźlica" />
       <rect
          style="display:inline;fill:#000000"
@@ -1838,9 +1838,17 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect184"
          width="6.0274882"
          height="6.172729"
-         x="199.36378"
-         y="42.07761"
+         x="199.46649"
+         y="37.045277"
          inkscape:label="#Różne choroby wirusowe i bakteryjne" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect185"
+         width="6.0274882"
+         height="6.172729"
+         x="177.28314"
+         y="48.445049"
+         inkscape:label="#Choroby przenoszone drogą płciową" />
     </g>
     <g
        inkscape:groupmode="layer"
@@ -1966,6 +1974,62 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          x="7.0902038"
          y="-134.84972"
          inkscape:label="#Genetyka organizmów i populacji" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect186"
+         width="6.0274882"
+         height="6.172729"
+         x="41.737129"
+         y="-49.678352"
+         inkscape:label="#Choroby tropikalne" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect187"
+         width="6.0274882"
+         height="6.172729"
+         x="99.249512"
+         y="54.152023"
+         inkscape:label="#Zespół policystycznych jajników" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect188"
+         width="6.0274882"
+         height="6.172729"
+         x="107.97907"
+         y="23.803978"
+         inkscape:label="#Embriologia i sztuczne zapłodnienie" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect189"
+         width="6.0274882"
+         height="6.172729"
+         x="92.830711"
+         y="-24.105886"
+         inkscape:label="#Malaria" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect190"
+         width="6.0274882"
+         height="6.172729"
+         x="113.42221"
+         y="-8.7521362"
+         inkscape:label="#Konie i zwierzęta domowe" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect191"
+         width="6.0274882"
+         height="6.172729"
+         x="126.00305"
+         y="-24.003183"
+         inkscape:label="#Bydło domowe" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect192"
+         width="6.0274882"
+         height="6.172729"
+         x="146.13239"
+         y="-30.832777"
+         inkscape:label="#Drób" />
     </g>
     <g
        inkscape:groupmode="layer"
