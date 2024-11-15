@@ -35,9 +35,19 @@
 
 /* d3 */
 #chart-d3 {
-  /* position: absolute; */
-  /* left: 0;
-      top: 0; */
   width: 100%;
   height: 100vh;
+}
+
+#chart .city-shape {
+  animation: fadeInOut 0.3s ease-in-out 1;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
