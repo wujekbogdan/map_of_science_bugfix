@@ -1,4 +1,3 @@
-import * as points from "./points";
 import { PATH_TO_ARTICLES } from "./config";
 
 function disableArticleAnimation(article) {
@@ -54,8 +53,9 @@ function buildArticle(dataPoint) {
 
 function buildArticleContent(dataPoint, url) {
   const html =
-    points.buildDataPointDetails(dataPoint) +
-    "<strong>More details from ETO</strong><br />" +
+    "<section><h1>Więcej informacji</h1><p>Więcej informacji na temat miasta <strong>#" +
+    dataPoint.clusterId +
+    "</strong> na stronie projektu ETO.</p></strong></section>" +
     "<iframe src='" +
     url +
     "' width='100%' height='100%'></iframe>";

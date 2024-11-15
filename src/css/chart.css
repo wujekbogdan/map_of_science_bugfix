@@ -39,8 +39,23 @@
   height: 100vh;
 }
 
-#chart .city-shape {
+.city-shape {
   animation: fadeInOut 0.3s ease-in-out 1;
+}
+
+.city-shape:hover circle,
+.city-shape:hover rect {
+  animation: aaa 1s ease-in-out infinite;
+}
+
+@keyframes aaa {
+  0% {
+  }
+  50% {
+    fill: rgb(255, 109, 109);
+  }
+  100% {
+  }
 }
 
 @keyframes fadeInOut {
