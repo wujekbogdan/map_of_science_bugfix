@@ -40,9 +40,9 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
      showborder="false"
      borderlayer="false"
      shape-rendering="auto"
-     inkscape:zoom="4.8685175"
-     inkscape:cx="5.8539381"
-     inkscape:cy="40.977566"
+     inkscape:zoom="9.737035"
+     inkscape:cx="120.72463"
+     inkscape:cy="-343.99589"
      inkscape:window-width="3840"
      inkscape:window-height="2050"
      inkscape:window-x="-12"
@@ -379,10 +379,11 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
        inkscape:label="#Beton" />
     <path
        class="fil0"
-       d="m 119.86452,-448.24629 c -12.78712,0.61364 -27.179183,9.06439 -40.135702,13.36664 -10.325598,3.42891 -19.603908,1.83461 -27.433008,8.88405 -3.61837,3.25757 -14.7071,13.322 -12.53466,18.71627 8.62994,21.42693 31.13827,16.64044 52.202863,16.52682 5.408295,-0.0293 20.916777,-1.19437 26.443377,-1.94598 13.92457,-1.89367 29.9153,-0.88461 42.85105,-6.37852 13.59888,-5.77571 17.59349,-7.42141 25.60429,-19.96295 3.4946,-5.47091 -10.44281,-11.09874 -23.42584,-14.69311 -16.32297,-4.51867 -34.33969,-14.95643 -43.57237,-14.51322 z"
+       d="m 126.84817,-445.57607 c -12.78712,0.61364 -15.47131,14.19942 -28.42783,18.50167 -10.325598,3.42891 -38.706233,4.91563 -46.535333,11.96507 -3.61837,3.25757 -6.080244,10.44638 -3.907804,15.84065 13.867674,14.44329 16.348935,6.05688 34.74375,16.32142 7.570861,4.22464 17.905617,16.37211 35.891837,17.15634 38.867,1.69469 32.17472,-29.53809 45.11047,-35.032 13.59888,-5.77571 12.15035,-8.65382 23.13947,-18.21704 4.89708,-4.26166 -10.44281,-11.09874 -23.42584,-14.69311 -16.32297,-4.51867 -27.35604,-12.28621 -36.58872,-11.843 z"
        id="path36"
        style="clip-rule:evenodd;display:inline;fill:#bbe9ab;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-dasharray:none;stroke-opacity:0.609571;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-       inkscape:label="#Nanotechnologia i elektronika" />
+       inkscape:label="#Nanotechnologia i elektronika"
+       sodipodi:nodetypes="ccccsscscc" />
     <path
        class="fil0"
        d="m 43.22515,-477.15504 c -3.26782,1.12944 -24.20863,7.00615 -30.99264,11.87289 -5.65065,4.05337 -9.91466,4.93348 -14.99207,12.43018 -7.0862,10.46255 -2.36753,19.87457 3.65497997,27.82845 11.64147003,15.37484 27.40077003,4.83068 39.75810003,-1.89728 13.78768,-7.50662 13.52565,-5.50293 26.83409,-6.34111 6.50258,-0.40984 15.704386,-4.16879 14.793714,-17.99532 -0.826518,-12.54695 -10.520134,-20.89851 -17.132004,-23.19977 -3.47165,-1.20835 -5.2031,-1.62766 -8.64579,-1.83101 -5.1378,-0.30389 -7.87418,-2.64663 -13.27838,-0.86703 z"
@@ -726,7 +727,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          height="6.172729"
          x="-117.46371"
          y="-456.63092"
-         inkscape:label="#Wytwarzanie i manipulacja strumieniami cząstek" />
+         inkscape:label="#Wytwarzanie i manipulowanie strumieniami cząstek" />
       <rect
          style="display:inline;fill:#000000"
          id="rect15"
@@ -1043,16 +1044,16 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect61"
          width="6.0274882"
          height="6.172729"
-         x="56.120895"
-         y="-461.55249"
+         x="47.914799"
+         y="-464.8204"
          inkscape:label="#Druk 3D metali i kompozytów" />
       <rect
          style="display:inline;fill:#000000"
          id="rect62"
          width="6.0274882"
          height="6.172729"
-         x="17.486876"
-         y="-455.59763"
+         x="11.168906"
+         y="-456.25122"
          inkscape:label="#Obróbka produktów, smarowanie" />
       <rect
          style="display:inline;fill:#000000"
@@ -1067,24 +1068,24 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect64"
          width="6.0274882"
          height="6.172729"
-         x="89.993546"
-         y="-409.38232"
+         x="86.43515"
+         y="-415.91815"
          inkscape:label="#Kubity, kropki kwantowe i okolice" />
       <rect
          style="display:inline;fill:#000000"
          id="rect65"
          width="6.0274882"
          height="6.172729"
-         x="116.18221"
-         y="-413.49036"
+         x="130.4158"
+         y="-416.8309"
          inkscape:label="#Nanowstążki, heterostruktury van der Waalsa i okolice" />
       <rect
          style="display:inline;fill:#000000"
          id="rect66"
          width="6.0274882"
          height="6.172729"
-         x="142.88438"
-         y="-430.64136"
+         x="137.07475"
+         y="-433.11044"
          inkscape:label="#Izolatory topologiczne i okolice" />
       <rect
          style="display:inline;fill:#000000"
@@ -1107,8 +1108,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect69"
          width="6.0274882"
          height="6.172729"
-         x="139.49716"
-         y="-297.41336"
+         x="134.77293"
+         y="-298.74847"
          inkscape:label="#Biomasa, ścieki, spalanie śmieci" />
       <rect
          style="display:inline;fill:#000000"
@@ -1123,16 +1124,16 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect71"
          width="6.0274882"
          height="6.172729"
-         x="192.48882"
-         y="-397.46906"
+         x="186.42947"
+         y="-398.49606"
          inkscape:label="#Ogniwa fotowoltaiczne i perowskity" />
       <rect
          style="display:inline;fill:#000000"
          id="rect72"
          width="6.0274882"
          height="6.172729"
-         x="209.33173"
-         y="-408.45804"
+         x="202.34808"
+         y="-411.53906"
          inkscape:label="#Ogniwa paliwowe" />
       <rect
          style="display:inline;fill:#000000"
@@ -1147,8 +1148,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect74"
          width="6.0274882"
          height="6.172729"
-         x="241.06624"
-         y="-378.77753"
+         x="244.86617"
+         y="-380.93423"
          inkscape:label="#Materiały do czujników gazu" />
       <rect
          style="display:inline;fill:#000000"
@@ -1163,8 +1164,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect76"
          width="6.0274882"
          height="6.172729"
-         x="205.22371"
-         y="-364.70752"
+         x="202.14268"
+         y="-367.17233"
          inkscape:label="#Elektronika miękka, smart textiles" />
       <rect
          style="display:inline;fill:#000000"
