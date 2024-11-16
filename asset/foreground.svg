@@ -40,15 +40,15 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
      showborder="false"
      borderlayer="false"
      shape-rendering="auto"
-     inkscape:zoom="1.4"
-     inkscape:cx="-147.5"
-     inkscape:cy="104.64286"
+     inkscape:zoom="5.6"
+     inkscape:cx="130.625"
+     inkscape:cy="450.44643"
      inkscape:window-width="3840"
      inkscape:window-height="2050"
      inkscape:window-x="-12"
      inkscape:window-y="-12"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer10"
      showguides="false" />
   <defs
      id="defs1">
@@ -506,7 +506,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
        sodipodi:nodetypes="scscccssss" />
     <path
        class="fil0"
-       d="m 104.53817,-113.88565 c -7.26385,5.05092 -19.723777,10.8225 -9.508774,14.26352 12.677014,4.270529 26.906624,7.647914 38.519494,9.501131 9.45305,1.508217 17.17296,2.006172 20.91025,1.152811 6.70593,-2.945059 10.99269,-6.238666 0.8361,-11.615172 -15.73671,-7.13486 -35.75149,-23.68946 -50.75707,-13.30229 z"
+       d="m 113.4924,-120.1166 c -8.2115,3.29342 -21.64835,6.12395 -12.46512,11.76799 11.39652,7.00451 24.50639,13.486795 35.40794,17.896932 8.87411,3.589597 16.28575,5.806014 20.11922,5.81245 7.19556,-1.366293 12.11173,-3.614742 3.41944,-11.131875 -13.73599,-10.482027 -29.52879,-31.103227 -46.48148,-24.345497 z"
        id="path111"
        style="clip-rule:evenodd;display:inline;fill:#bbe9ab;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.10944;stroke-dasharray:none;stroke-opacity:0.609571;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        inkscape:label="#Hodowla zwierząt"
@@ -1780,16 +1780,16 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect167"
          width="6.0274882"
          height="6.172729"
-         x="6.0519972"
-         y="466.92688"
+         x="3.9984257"
+         y="463.98044"
          inkscape:label="#Zarządzanie bólem" />
       <rect
          style="display:inline;fill:#000000"
          id="rect168"
          width="6.0274882"
          height="6.172729"
-         x="-13.044433"
-         y="494.88498"
+         x="-21.973003"
+         y="494.59479"
          inkscape:label="#Ból głowy" />
       <rect
          style="display:inline;fill:#000000"
@@ -1812,8 +1812,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect171"
          width="6.0274882"
          height="6.172729"
-         x="-43.646271"
-         y="506.83838"
+         x="-39.829308"
+         y="507.50803"
          inkscape:label="#Urazy kolana" />
       <rect
          style="display:inline;fill:#000000"
@@ -1884,9 +1884,17 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect196"
          width="6.0274882"
          height="6.172729"
-         x="63.249557"
-         y="213.64297"
+         x="65.269859"
+         y="205.94057"
          inkscape:label="#Dietetyka" />
+      <rect
+         style="display:inline;fill:#000000"
+         id="rect211"
+         width="6.0274882"
+         height="6.172729"
+         x="155.35211"
+         y="494.71555"
+         inkscape:label="#Oczy i widzenie" />
     </g>
     <g
        inkscape:groupmode="layer"
@@ -1969,8 +1977,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect114"
          width="6.0274882"
          height="6.172729"
-         x="106.95205"
-         y="-109.14204"
+         x="115.85402"
+         y="-113.11951"
          inkscape:label="#Pestycydy" />
       <rect
          style="display:inline;fill:#000000"
@@ -2078,8 +2086,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect172"
          width="6.0274882"
          height="6.172729"
-         x="-55.932819"
-         y="496.21265"
+         x="-53.946213"
+         y="494.8064"
          inkscape:label="#Biomechanika ruchu" />
       <rect
          style="display:inline;fill:#000000"
@@ -2102,8 +2110,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect175"
          width="6.0274882"
          height="6.172729"
-         x="-93.62204"
-         y="465.47183"
+         x="-94.336327"
+         y="463.01648"
          inkscape:label="#Psychologia sportu" />
       <rect
          style="display:inline;fill:#000000"
@@ -2134,8 +2142,8 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect200"
          width="6.0274882"
          height="6.172729"
-         x="-58.082233"
-         y="376.2114"
+         x="-60.403664"
+         y="375.2739"
          inkscape:label="#Starość" />
       <rect
          style="display:inline;fill:#000000"
@@ -2166,9 +2174,9 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect205"
          width="6.0274882"
          height="6.172729"
-         x="-38.617954"
-         y="396.65781"
-         inkscape:label="#Pacjenci" />
+         x="-36.028667"
+         y="393.48816"
+         inkscape:label="#Ach ci pacjenci" />
       <rect
          style="display:inline;fill:#000000"
          id="rect206"
@@ -2182,24 +2190,24 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          id="rect207"
          width="6.0274882"
          height="6.172729"
-         x="-76.292274"
-         y="200.77901"
+         x="-73.766891"
+         y="208.67082"
          inkscape:label="#Przestępczość" />
       <rect
          style="display:inline;fill:#000000"
          id="rect208"
          width="6.0274882"
          height="6.172729"
-         x="-58.235798"
-         y="239.54361"
+         x="-51.543537"
+         y="231.77806"
          inkscape:label="#Ideologie, uprzedzenia, konflikty" />
       <rect
          style="display:inline;fill:#000000"
          id="rect209"
          width="6.0274882"
          height="6.172729"
-         x="-76.923622"
-         y="277.92941"
+         x="-72.946144"
+         y="277.42435"
          inkscape:label="#Przemoc" />
     </g>
     <g
