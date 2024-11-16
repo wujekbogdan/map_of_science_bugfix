@@ -41,14 +41,14 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
      borderlayer="false"
      shape-rendering="auto"
      inkscape:zoom="5.6"
-     inkscape:cx="130.625"
-     inkscape:cy="450.44643"
+     inkscape:cx="247.94643"
+     inkscape:cy="-350.26786"
      inkscape:window-width="3840"
      inkscape:window-height="2050"
      inkscape:window-x="-12"
      inkscape:window-y="-12"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer10"
+     inkscape:current-layer="layer8"
      showguides="false" />
   <defs
      id="defs1">
@@ -1099,7 +1099,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          height="6.172729"
          x="168.35416"
          y="-422.83612"
-         inkscape:label="#Cienkie filmy i nanoelektronika" />
+         inkscape:label="#Cienkie warstwy i nanoelektronika" />
       <rect
          style="display:inline;fill:#000000"
          id="rect68"
@@ -1147,7 +1147,7 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
          height="6.172729"
          x="218.9856"
          y="-386.58276"
-         inkscape:label="#Nanopręciki i cienkie filmy ZnO" />
+         inkscape:label="#Nanopręciki i cienkie warstwy ZnO" />
       <rect
          style="display:inline;fill:#000000"
          id="rect74"
@@ -1183,14 +1183,6 @@ d888888b d88888b .88b  d88. d8888b. db       .d8b.  d888888b d88888b
       <rect
          style="display:inline;fill:#000000"
          id="rect78"
-         width="6.0274882"
-         height="6.172729"
-         x="215.08296"
-         y="-319.8273"
-         inkscape:label="#Żywice, kompozyty, piany, włókna" />
-      <rect
-         style="display:inline;fill:#000000"
-         id="rect79"
          width="6.0274882"
          height="6.172729"
          x="215.08296"
