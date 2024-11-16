@@ -1,5 +1,6 @@
 cluster_id	label
 3988	Osobowość i różnice międzyosobnicze zwierząt
+999999	FIZYKA-FOTONIKA--------------------------------------------
 38	Spektroskopia LIBS
 31081	Generowanie wyższych harmonicznych
 2235	Plazma niskotemperaturowa
@@ -20,3 +21,17 @@ cluster_id	label
 10916	Obrazowanie w ośrodkach rozpraszających
 1945	Wyświetlacze holograficzne
 3172	Materia aktywna
+999999	MÓZG--------------------------------------------
+30288	Anosmia i inne zaburzenia węchu
+9188	Substancje psychodeliczne
+3769	Ketamina i esketamina w leczeniu depresji
+5903	Mikrobiom w depresji i innych zaburzeniach psychicznych
+5408	Mikroglej
+15797	Epigenetyczne markery starzenia
+7417	Kannabidiol (CBD)
+6769	Głębokie sieci neuronowe w badaniach Alzheimera
+532	Przezczaszkowa stymulacja prądem stałym (tDCS)
+388	Obrazowanie mózgu podczas wyobrażania ruchowego
+3370	Rozpoznawanie emocji na podstawie EEG
+7456	Poczucie ciała w wirtualnej rzeczywistości
+
