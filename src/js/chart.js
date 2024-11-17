@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import * as zoom from "./zoom";
 import * as foreground from "./foreground";
 import * as article from "./article";
+import * as annotation from "./annotation";
 import {
   CITY_5_OUTER_SIZE,
   CITY_5_INNER_SIZE,
@@ -64,6 +65,21 @@ export function initChart(dataPoints) {
   window.addEventListener("resize", () => zoom.handleResize(dataPoints));
 }
 
+// eslint-disable-next-line no-unused-vars
+function handleCityHover(event, city) {
+  annotation.updateAnnotation(city);
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleCityClick(event, city) {
+  article.enableArticle(city);
+}
+
+// eslint-disable-next-line no-unused-vars
+function handleCityHoverOut(event, city) {
+  annotation.updateAnnotation(null);
+}
+
 export function renderChart(data) {
   const shapes = plotGroup
     .selectAll(".city-shape")
@@ -76,10 +92,9 @@ export function renderChart(data) {
   newShapes.each(function (d) {
     const group = d3
       .select(this)
-      .on("mouseover", () => {})
-      .on("click", () => {
-        article.enableArticle(d);
-      });
+      .on("mouseover", (event) => handleCityHover(event, d))
+      .on("click", (event) => handleCityClick(event, d))
+      .on("mouseout", (event) => handleCityHoverOut(event));
 
     if (d.numRecentArticles <= CITY_SIZE_THRESHOLD_0) {
       group
