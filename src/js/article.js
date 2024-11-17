@@ -1,35 +1,49 @@
 import { PATH_TO_ARTICLES } from "./config";
 
-function disableArticleAnimation(article) {
+function disableArticleInAnimation(article) {
   article.classList.remove("animate__animated");
   article.classList.remove("animate__fadeInRight");
   article.classList.remove("animate__faster");
 }
 
-function enableArticleAnimation(article) {
+function enableArticleInAnimation(article) {
   article.classList.add("animate__animated");
   article.classList.add("animate__fadeInRight");
   article.classList.add("animate__faster");
 }
 
+function disableArticleOutAnimation(article) {
+  article.classList.remove("animate__animated");
+  article.classList.remove("animate__fadeOutRight");
+  article.classList.remove("animate__faster");
+}
+
+function enableArticleOutAnimation(article) {
+  article.classList.add("animate__animated");
+  article.classList.add("animate__fadeOutRight");
+  article.classList.add("animate__faster");
+}
+
 export function disableArticle() {
   const article = document.getElementById("article");
-  article.style.visibility = "hidden";
-  disableArticleAnimation(article);
+  // article.style.visibility = "hidden";
+  disableArticleInAnimation(article);
+  enableArticleOutAnimation(article);
 }
 
 export function enableArticle(dataPoint) {
   const article = document.getElementById("article");
   buildArticle(dataPoint);
   article.style.visibility = "visible";
-  enableArticleAnimation(article);
+  disableArticleOutAnimation(article);
+  enableArticleInAnimation(article);
 }
 
 export function enableLabelArticle(labelText) {
   const article = document.getElementById("article");
   buildLabelArticle(labelText);
   article.style.visibility = "visible";
-  enableArticleAnimation(article);
+  enableArticleInAnimation(article);
 }
 
 function buildArticle(dataPoint) {
