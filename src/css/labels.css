@@ -21,9 +21,6 @@
     0 0 5px #f2efe9,
     0 0 5px #f2efe9,
     0 0 5px #f2efe9;
-
-  /* Smooth transition for hover effects */
-  transition: color 0.1s ease;
 }
 
 #labels0 {
@@ -45,9 +42,18 @@
   font-weight: bold;
 }
 
-.label-hover {
+.label-available {
+  transition: color 0.2s ease;
+  color: blue;
+  text-decoration: underline;
+}
+
+.label-available:hover {
   cursor: pointer;
-  color: rgb(255, 0, 0);
+  animation: hover-animation 1s ease-in-out infinite;
+}
+
+.label-unavailable {
 }
 
 #ff {
@@ -55,4 +61,14 @@
   left: 0;
   top: 0;
   pointer-events: visiblePainted;
+}
+
+@keyframes hover-animation {
+  0% {
+  }
+  50% {
+    color: rgb(255, 109, 109);
+  }
+  100% {
+  }
 }

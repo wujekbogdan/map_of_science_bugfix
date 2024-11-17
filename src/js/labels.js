@@ -17,6 +17,12 @@ class Label {
 }
 
 export function initLabels(xScale, yScale, kZoom) {
+  article.fetchAvailableArticlesList().then(() => {
+    initLabelsAfterFetchingArticlesList(xScale, yScale, kZoom);
+  });
+}
+
+function initLabelsAfterFetchingArticlesList(xScale, yScale, kZoom) {
   buildLabelsDiv();
 
   getForegroundLayers().forEach((layer, layer_no) => {
@@ -26,10 +32,12 @@ export function initLabels(xScale, yScale, kZoom) {
     getLabelsFromSvgGroup(layer).forEach((label) => {
       const orgFontSize = getFontSizeInPx(LabelsDivLayer);
       LabelsDivLayer.append("div")
-        .attr("class", "label")
         .attr("x", label.x)
         .attr("y", label.y)
         .attr("org-font-size", orgFontSize)
+        .classed("label", true)
+        .classed("label-available", article.isArticleAvailable(label.html))
+        .classed("label-unavailable", !article.isArticleAvailable(label.html))
         .text(label.html);
     });
   });
@@ -65,15 +73,14 @@ export function updateLabels(xScale, yScale, kZoom) {
         const xMoved = xScale(x);
         const yMoved = yScale(-y);
         const orgFontSize = label.attr("org-font-size");
+        const isAvailable = article.isArticleAvailable(label.text());
         label
           .style("left", xMoved + "px")
           .style("top", yMoved + "px")
           .style("opacity", visibilities[layer_no])
           .style("display", visibilities[layer_no] == 0 ? "none" : "block")
           .style("font-size", calcLabelFontSize(orgFontSize, kZoom))
-          .on("click", () => handleClickLabel(labels[index]))
-          .on("mouseover", () => handleHoverInLabel(label))
-          .on("mouseout", () => handleHoverOutLabel(label));
+          .on("click", () => handleClickLabel(isAvailable, labels[index]));
       });
   });
 }
@@ -129,15 +136,9 @@ function getLabelFromSvgElement(svgElement) {
   );
 }
 
-function handleClickLabel(label) {
+function handleClickLabel(isAvailable, label) {
+  if (!isAvailable) return;
+
   const labelId = label.innerHTML;
   article.enableLabelArticle(labelId);
-}
-
-function handleHoverInLabel(selection) {
-  selection.classed("label-hover", true);
-}
-
-function handleHoverOutLabel(selection) {
-  selection.classed("label-hover", false);
 }

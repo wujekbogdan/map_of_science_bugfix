@@ -6,6 +6,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ArticleListGeneratorPlugin = require("./plugins/ArticleListGeneratorPlugin");
 
 const foregroundSvg = fs.readFileSync(__dirname + "/asset/foreground.svg");
 
@@ -33,6 +34,9 @@ module.exports = {
       patterns: [
         { from: "articles", to: "articles" }, // Copy articles directory to dist/articles
       ],
+    }),
+    new ArticleListGeneratorPlugin({
+      articlesPath: "../articles",
     }),
   ],
   module: {

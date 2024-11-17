@@ -1,5 +1,7 @@
 import { PATH_TO_ARTICLES } from "./config";
 
+let cachedArticleList = null;
+
 function disableArticleInAnimation(article) {
   article.classList.remove("animate__animated");
   article.classList.remove("animate__fadeInRight");
@@ -43,6 +45,7 @@ export function enableLabelArticle(labelText) {
   const article = document.getElementById("article");
   buildLabelArticle(labelText);
   article.style.visibility = "visible";
+  disableArticleOutAnimation(article);
   enableArticleInAnimation(article);
 }
 
@@ -67,6 +70,10 @@ function buildArticle(dataPoint) {
 
 function buildArticleContent(dataPoint, url) {
   const html =
+    "<section>" +
+    "<button id='article-close'>✖ Zamknij</button>" +
+    "<button id='article-open'>⬈ Otwórz w nowym oknie</button>" +
+    "</section>" +
     "<section><h1>Więcej informacji</h1><p>Więcej informacji na temat miasta <strong>#" +
     dataPoint.clusterId +
     "</strong> na stronie projektu ETO.</p></strong></section>" +
@@ -96,30 +103,53 @@ async function fetchArticle(labelText) {
       const content = await response.text();
       return content;
     }
-    return "<p>Content not found.</p>";
+    return null;
   } catch (error) {
     console.error("Error fetching article content:", error);
-    return "<p>Error loading content.</p>";
+    return null;
   }
 }
 
 function buildLabelArticle(labelText) {
   const article = document.getElementById("article-content");
 
-  // wait for fetchArticle
+  article.innerHTML =
+    "<section>" +
+    "<button id='article-close'>✖ Zamknij</button>" +
+    "</section>";
+
   fetchArticle(labelText).then((content) => {
-    article.innerHTML = content;
+    article.innerHTML += "<section>" + content + "</section>";
+
+    const articleClose = document.getElementById("article-close");
+    articleClose.onclick = () => {
+      disableArticle();
+    };
   });
+}
 
-  console.log(labelText);
+export function isArticleAvailable(articleName) {
+  const articleFilename = labelTextToLabelId(articleName) + ".html";
+  const is = getAvailableArticleList().includes(articleFilename);
+  return is;
+}
 
-  const articleClose = document.getElementById("article-close");
-  articleClose.onclick = () => {
-    disableArticle();
-  };
+export async function fetchAvailableArticlesList() {
+  if (cachedArticleList) {
+    return Promise.resolve(cachedArticleList);
+  }
 
-  const articleOpen = document.getElementById("article-open");
-  articleOpen.onclick = () => {
-    window.open("", "_blank");
-  };
+  try {
+    const response = await fetch("articlesList.json");
+    const articleList = await response.json();
+    cachedArticleList = articleList;
+    return articleList;
+  } catch (error) {
+    console.error("Error fetching article list:", error);
+    return [];
+  }
+}
+
+export function getAvailableArticleList() {
+  return cachedArticleList;
 }
