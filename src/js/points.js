@@ -49,36 +49,11 @@ function findClosestDataPoint(dataPoints, x, y, radius) {
   return closestDataPoint;
 }
 
-function getClusterCategoryList() {
-  return [
-    "biology",
-    "chemistry",
-    "computer science",
-    "earth science",
-    "engineering",
-    "humanities",
-    "materials science",
-    "mathematics",
-    "medicine",
-    "physics",
-    "social science",
-  ];
-}
-
-function clusterCategoryIdToText(clusterCategoryId) {
-  return getClusterCategoryList()[clusterCategoryId];
-}
-
 export function buildDataPointDetails(dataPoint) {
   let html = "";
 
-  // cluster id
   html += "<strong>#" + dataPoint.clusterId + "</strong>" + "<br />";
 
-  // cluster category
-  html += clusterCategoryIdToText(dataPoint.clusterCategoryId) + "<br />";
-
-  // number of articles
   if (dataPoint.numRecentArticles <= 100) {
     html += "<span class='few-articles'>";
   } else if (dataPoint.numRecentArticles >= 1000) {
@@ -86,7 +61,7 @@ export function buildDataPointDetails(dataPoint) {
   } else {
     html += "<span>";
   }
-  html += "articles: " + dataPoint.numRecentArticles + "</span><br />";
+  html += "Ilość artykułów: " + dataPoint.numRecentArticles + "</span><br />";
 
   // growth rating
   if (dataPoint.growthRating >= 80) {
@@ -94,11 +69,11 @@ export function buildDataPointDetails(dataPoint) {
   } else {
     html += "<span>";
   }
-  html += "growth: " + dataPoint.growthRating + "</span><br />";
+  html += "Wskaźnik rozwoju: " + dataPoint.growthRating + "</span><br />";
 
   // key concepts
 
-  html += "<br /><strong>key concepts:</strong><ul>";
+  html += "<br /><strong>Kluczowe pojęcia:</strong><ul>";
 
   for (const concept_id of dataPoint.keyConcepts) {
     html += "<li>" + concepts[Number(concept_id)] + "</li>";
