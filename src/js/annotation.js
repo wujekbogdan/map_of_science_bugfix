@@ -1,7 +1,7 @@
 import * as points from "./points";
 import * as zoom from "./zoom";
 
-function buildAnnotation(dataPoint) {
+function enableAnnotation(dataPoint) {
   const annotation = document.createElement("div");
 
   annotation.id = "annotation";
@@ -12,18 +12,12 @@ function buildAnnotation(dataPoint) {
   );
   annotation.innerHTML = points.buildDataPointDetails(dataPoint);
 
-  document.getElementById("chart").appendChild(annotation);
-}
-
-function enableAnnotation(dataPoint, xScale, yScale) {
-  const annotation = document.getElementById("annotation");
-
-  const x = xScale(dataPoint.x);
-  const y = yScale(dataPoint.y);
-
-  annotation.style.visibility = "visible";
+  const x = zoom.xScale(dataPoint.x);
+  const y = zoom.yScale(dataPoint.y);
   annotation.style.top = y + "px";
   annotation.style.left = x + "px";
+
+  document.getElementById("chart").appendChild(annotation);
 }
 
 function disableAnnotation() {
@@ -34,15 +28,12 @@ function disableAnnotation() {
   }
 
   annotation.remove();
-
-  // annotation.parentElement.removeChild(annotation);
 }
 
 export function updateAnnotation(dataPoint) {
   if (dataPoint == null) {
     disableAnnotation();
   } else {
-    buildAnnotation(dataPoint);
-    enableAnnotation(dataPoint, zoom.xScale, zoom.yScale);
+    enableAnnotation(dataPoint);
   }
 }
