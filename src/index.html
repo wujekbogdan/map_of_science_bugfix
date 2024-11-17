@@ -4,36 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Map of Science</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- <link rel="stylesheet" href="styles.css"> -->
   </head>
   <body>
-    <!-- article -->
     <div id="article" class="content">
       <div id="article-content"></div>
     </div>
 
-    <!-- chart -->
     <div id="chart">
-      <!-- d3 plane -->
       <div id="chart-d3"></div>
-      <!-- custom svg plane -->
       <div id="foreground"><%= htmlWebpackPlugin.options.foregroundSvg %></div>
-      <!-- annotation -->
-      <!-- <div id="annotation">
-        <div
-          id="annotation-body"
-          class="content animate__animated animate__fadeIn"
-        ></div>
-      </div> -->
     </div>
 
-    <!-- loading -->
-    <div id="loading"><span>loading...</span></div>
+    <div id="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+    </div>
   </body>
 </html>

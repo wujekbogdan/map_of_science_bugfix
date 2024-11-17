@@ -6,6 +6,7 @@ import "../css/chart.css";
 import "../css/common.css";
 import "../css/content.css";
 import "../css/labels.css";
+import "../css/loading.css";
 
 import "animate.css";
 

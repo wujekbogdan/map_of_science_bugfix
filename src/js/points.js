@@ -1,10 +1,7 @@
-import * as d3 from "d3";
 import * as chart from "./chart";
 
 export let data = [];
 let concepts = {};
-// eslint-disable-next-line no-unused-vars
-let quadtree = null;
 
 function parseKeyConceptsRaw(keyConceptsRaw) {
   return keyConceptsRaw.split(",");
@@ -12,12 +9,6 @@ function parseKeyConceptsRaw(keyConceptsRaw) {
 
 function parseConceptItem(item) {
   concepts[item["index"]] = item["key"];
-}
-
-// eslint-disable-next-line no-unused-vars
-function handleConceptsLoaded(conceptData) {
-  console.log("Concepts Loaded");
-  //   concepts = conceptData;
 }
 
 function parseDataPointItem(item) {
@@ -84,24 +75,10 @@ export function buildDataPointDetails(dataPoint) {
 }
 
 function handleDataPointsLoaded(dataPoints) {
-  console.log("Data Points Loaded");
-
   // Sort data by num_recent_articles
   dataPoints.sort((a, b) => b.numRecentArticles - a.numRecentArticles);
 
-  // Create a spatial index for rapidly finding the closest data point
-  quadtree = buildQuadtree(dataPoints);
-
   chart.initChart(dataPoints);
-}
-
-function buildQuadtree(dataPoints) {
-  const quadtree = d3
-    .quadtree()
-    .x((d) => d.x)
-    .y((d) => d.y)
-    .addAll(dataPoints);
-  return quadtree;
 }
 
 function buildLoaderWorker() {
@@ -149,6 +126,6 @@ export function loadConcepts() {
     new URL("../../asset/keys.tsv", import.meta.url),
     parseConceptItem,
     [], // We don't need to store the concepts in an array, they go to the `concepts` object
-    handleConceptsLoaded,
+    () => {},
   );
 }
