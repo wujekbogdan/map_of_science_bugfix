@@ -52,7 +52,7 @@ export function buildDataPointDetails(dataPoint) {
   } else {
     html += "<span>";
   }
-  html += "Ilość artykułów: " + dataPoint.numRecentArticles + "</span><br />";
+  html += "Liczba artykułów: " + dataPoint.numRecentArticles + "</span><br />";
 
   // growth rating
   if (dataPoint.growthRating >= 80) {
@@ -64,7 +64,7 @@ export function buildDataPointDetails(dataPoint) {
 
   // key concepts
 
-  html += "<br /><strong>Kluczowe pojęcia:</strong><ul>";
+  html += "<br /><strong>Słowa kluczowe:</strong><ul>";
 
   for (const concept_id of dataPoint.keyConcepts) {
     html += "<li>" + concepts[Number(concept_id)] + "</li>";
