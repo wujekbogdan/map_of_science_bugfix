@@ -74,9 +74,9 @@ function buildArticleContent(dataPoint, url) {
     "<button id='article-close'>✖ Zamknij</button>" +
     "<button id='article-open'>⬈ Otwórz w nowym oknie</button>" +
     "</section>" +
-    "<section><h1>Więcej informacji</h1><p>Więcej informacji na temat miasta <strong>#" +
+    "<section><p>Więcej informacji na temat klastra <strong>#" +
     dataPoint.clusterId +
-    "</strong> na stronie projektu ETO.</p></strong></section>" +
+    "</strong> ze strony projektu ETO Map of Science:</p></strong></section>" +
     "<iframe src='" +
     url +
     "' width='100%' height='100%'></iframe>";
