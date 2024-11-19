@@ -11,7 +11,7 @@ import {
 
 function hideForegroundRects() {
   // set display none for all rects in the foreground
-  selectForegroundSvg().selectAll("rect").style("display", "none");
+  selectForegroundSvg().selectAll("rect").style("opacity", "0.0");
 }
 
 export function initForeground(xScale, yScale, kZoom) {
