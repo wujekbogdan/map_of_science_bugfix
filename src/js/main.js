@@ -11,7 +11,7 @@ import "../css/loading.css";
 import "animate.css";
 
 function enableLoadingScreen() {
-  document.getElementById("loading").style.display = "block";
+  document.getElementById("loading").style.display = "flex";
   document.getElementById("chart").style.display = "none";
 }
 
