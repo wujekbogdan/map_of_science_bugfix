@@ -7,6 +7,7 @@ import {
   LABEL_ZOOM_SCALE_FACTOR_MAX,
   LABEL_ZOOM_SCALE_FACTOR_MIN,
 } from "./config";
+import { data } from "./points";
 
 class Label {
   constructor(html, x, y) {
@@ -18,19 +19,20 @@ class Label {
 
 export function initLabels(xScale, yScale, kZoom) {
   article.fetchAvailableArticlesList().then(() => {
-    initLabelsAfterFetchingArticlesList(xScale, yScale, kZoom);
+    buildLabelsDiv();
+    initLabelsAfterFetchingArticlesList();
+    updateLabels(xScale, yScale, kZoom);
   });
 }
 
-function initLabelsAfterFetchingArticlesList(xScale, yScale, kZoom) {
-  buildLabelsDiv();
-
-  getForegroundLayers().forEach((layer, layer_no) => {
+function initLabelsAfterFetchingArticlesList() {
+  [...getForegroundLayers()].reverse().forEach((layer, i) => {
+    const layer_no = getForegroundLayers().length - 1 - i;
     buildLabelsDivLayer(layer_no);
     const LabelsDivLayer = getLabelsDivLayer(layer_no);
+    const orgFontSize = getFontSizeInPx(LabelsDivLayer);
 
     getLabelsFromSvgGroup(layer).forEach((label) => {
-      const orgFontSize = getFontSizeInPx(LabelsDivLayer);
       LabelsDivLayer.append("div")
         .attr("x", label.x)
         .attr("y", label.y)
@@ -40,9 +42,22 @@ function initLabelsAfterFetchingArticlesList(xScale, yScale, kZoom) {
         .classed("label-unavailable", !article.isArticleAvailable(label.html))
         .text(label.html);
     });
-  });
 
-  updateLabels(xScale, yScale, kZoom);
+    // Add city labels to the last layer
+    if (layer_no === getForegroundLayers().length - 1) {
+      data.forEach((dataPoint) => {
+        if (dataPoint.cityLabel) {
+          LabelsDivLayer.append("div")
+            .attr("x", dataPoint.x)
+            .attr("y", dataPoint.y)
+            .attr("org-font-size", orgFontSize)
+            .classed("label", true)
+            .classed("city-label", true)
+            .text(dataPoint.cityLabel);
+        }
+      });
+    }
+  });
 }
 
 function calcLabelFontSize(orgFontSizeInPx, kZoom) {
@@ -70,17 +85,23 @@ export function updateLabels(xScale, yScale, kZoom) {
         const label = d3.select(labels[index]);
         const x = label.attr("x");
         const y = label.attr("y");
+        const isCityLabel = label.classed("city-label");
         const xMoved = xScale(x);
-        const yMoved = yScale(-y);
+        const yMoved = yScale(isCityLabel ? y : -y);
         const orgFontSize = label.attr("org-font-size");
-        const isAvailable = article.isArticleAvailable(label.text());
+        const isAvailable =
+          !isCityLabel && article.isArticleAvailable(label.text());
+
         label
           .style("left", xMoved + "px")
           .style("top", yMoved + "px")
           .style("opacity", visibilities[layer_no])
           .style("display", visibilities[layer_no] == 0 ? "none" : "block")
-          .style("font-size", calcLabelFontSize(orgFontSize, kZoom))
-          .on("click", () => handleClickLabel(isAvailable, labels[index]));
+          .style("font-size", calcLabelFontSize(orgFontSize, kZoom));
+
+        if (!isCityLabel) {
+          label.on("click", () => handleClickLabel(isAvailable, labels[index]));
+        }
       });
   });
 }
